@@ -1,0 +1,16 @@
+{
+  "name": "motiv-site",
+  "version": "1.0.0",
+  "description": "Сайт «Мотив» — ремонт пластиковых окон в Челябинске",
+  "scripts": {
+    "build": "esbuild src/site.js src/app.js --bundle --minify --format=esm --target=es2020 --outdir=assets/js",
+    "watch": "esbuild src/site.js src/app.js --bundle --format=esm --target=es2020 --sourcemap --outdir=assets/js --watch",
+    "logo": "node scripts/build-logo.mjs"
+  },
+  "type": "module",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.186.1"
+  },
+  "private": true
+}
