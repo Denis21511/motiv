@@ -238,11 +238,19 @@ export function initReveal() {
 
 export function splitWords(el) {
   if (!el) return;
-  const words = el.innerHTML.trim().split(/\s+/);
-  el.innerHTML = words
-    .map((w, i) => `<span class="w"><span style="--i:${i}">${w}</span></span>`)
-    .join(' ');
-  el.setAttribute('aria-label', el.textContent);
+  const label = el.textContent.replace(/\s+/g, ' ').trim();
+  let i = 0;
+  const split = (html) =>
+    html
+      .trim()
+      .split(/\s+/)
+      .map((w) => `<span class="w"><span style="--i:${i++}">${w}</span></span>`)
+      .join(' ');
+  // заголовок из нескольких строк (.line) — делим каждую строку отдельно, сохраняя разметку строк
+  const lines = el.querySelectorAll(':scope > .line');
+  if (lines.length) lines.forEach((line) => { line.innerHTML = split(line.innerHTML); });
+  else el.innerHTML = split(el.innerHTML);
+  el.setAttribute('aria-label', label);
 }
 
 /* ---------- счётчики цен ---------- */
