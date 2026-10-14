@@ -263,10 +263,10 @@ img, svg { display: block; }
 }
 
 /* облака за окном: видео на всю ширину, слева затемнено под текст */
-.hero-sky { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.hero-sky-video { width: 100%; height: 100%; object-fit: cover; }
-.js .hero-sky-video { opacity: 0; transition: opacity 1.4s ease; }
-.js .hero-sky.is-ready .hero-sky-video { opacity: 1; }
+.sky { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.sky-video { width: 100%; height: 100%; object-fit: cover; }
+.js .sky-video { opacity: 0; transition: opacity 1.4s ease; }
+.js .sky.is-ready .sky-video { opacity: 1; }
 .hero-sky::after {
   content: '';
   position: absolute;
@@ -452,6 +452,30 @@ img, svg { display: block; }
   font-size: 14px;
   color: var(--on-dark-2);
 }
+
+/* ---------- подпись над заголовком ---------- */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue-600);
+}
+/* два пикселя — как в логотипе и на границах секций */
+.eyebrow::before {
+  content: '';
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  background: currentColor;
+  box-shadow: 12px 0 0 rgba(63, 162, 245, 0.45);
+}
+.on-dark .eyebrow { color: var(--sky-300); }
 
 /* ---------- пиксельные границы секций ---------- */
 
@@ -862,73 +886,88 @@ img, svg { display: block; }
 
 /* ---------- услуги ---------- */
 
-.services-section { background: var(--sky-50); }
-.services { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; list-style: none; margin: 0; padding: 0; }
+.services-section { background: #fff; }
+/* 6 колонок: две главные услуги по половине ряда, остальные по трети */
+.services { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; list-style: none; margin: 0; padding: 0; }
 .service {
   position: relative;
+  grid-column: span 2;
   display: flex;
   flex-direction: column;
-  padding: 26px 24px 22px;
-  background: #fff;
+  background: var(--sky-50);
+  border: 1px solid var(--line);
   border-radius: var(--radius-l);
   overflow: hidden;
-  isolation: isolate;
+  transition: transform 0.35s var(--ease-out), box-shadow 0.35s, border-color 0.35s;
 }
-.service::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--blue-700);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 0.5s var(--ease-out);
+.service-lg { grid-column: span 3; }
+/* картинка из нашей 3D-модели на «чертеже», как в калькуляторе */
+.service-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-color: var(--blue-800);
+  background-image:
+    linear-gradient(rgba(143, 182, 227, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 182, 227, 0.16) 1px, transparent 1px),
+    linear-gradient(rgba(143, 182, 227, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 182, 227, 0.07) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  background-position: -1px -1px;
+  overflow: hidden;
 }
-.service h3,
-.service p,
-.service-price,
-.service-foot a { transition: color 0.3s; }
-.service-icon {
-  display: grid;
-  place-items: center;
-  width: 54px;
-  height: 54px;
-  background: var(--sky-100);
-  border-radius: 12px;
-  transition: background-color 0.35s, transform 0.5s var(--ease-out);
-}
-.service .icon { width: 30px; height: 30px; transition: stroke 0.3s; }
-.service h3 { margin-top: 22px; }
+.service-lg .service-media { aspect-ratio: 16 / 9; }
+.service-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease-out); }
+.service-body { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 20px; }
+.service h3 { font-size: 19px; }
+.service-lg h3 { font-size: 24px; }
 .service p { flex: 1; margin-top: 8px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.service-lg p { font-size: 16px; }
 .service-foot {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  margin-top: 22px;
-  padding-top: 16px;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 18px;
+  padding-top: 14px;
   border-top: 1px solid var(--line);
-  transition: border-color 0.3s;
 }
-.service-price { font-size: 15px; font-weight: 600; color: var(--ink); }
+.service-price { font-size: 16px; font-weight: 600; color: var(--ink); }
+.service-lg .service-price { font-size: 18px; }
 .service-foot a { font-size: 14px; font-weight: 500; text-decoration: none; }
 .service-foot a::after { content: ''; position: absolute; inset: 0; }
 
 @media (hover: hover) {
-  .service:hover::before { transform: scaleY(1); }
-  .service:hover .service-icon { background: var(--sky-300); transform: translateY(-3px) rotate(-4deg); }
-  .service:hover .icon { stroke: var(--navy-800); }
-  .service:hover h3,
-  .service:hover .service-price,
-  .service:hover .service-foot a { color: #fff; }
-  .service:hover p { color: var(--on-dark-2); }
-  .service:hover .service-foot { border-color: var(--line-dark); }
+  .service:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: 0 22px 44px -26px rgba(6, 25, 58, 0.45); }
+  .service:hover .service-media img { transform: scale(1.06); }
 }
 .service:focus-within { outline: 2px solid var(--blue-600); outline-offset: 2px; }
 
 /* ---------- цены ---------- */
 
-.prices-section { background: var(--blue-700); color: #fff; overflow: hidden; }
+.prices-section { background: var(--blue-800) url(../video/sky-poster.jpg) center / cover no-repeat; color: #fff; overflow: hidden; }
+.prices-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(14, 58, 120, 0.96) 0%, rgba(21, 83, 184, 0.88) 42%, rgba(21, 83, 184, 0.62) 100%);
+}
+.prices-grid { position: relative; z-index: 1; }
+.price-panel {
+  padding: 26px 30px 10px;
+  background: rgba(6, 25, 58, 0.36);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-l);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.price-table tbody tr:last-child th,
+.price-table tbody tr:last-child td { border-bottom: 0; }
+.visit { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--line-dark); }
+.visit h3 { font-size: 17px; }
+.visit-list { display: grid; gap: 12px; margin: 16px 0 0; padding: 0; list-style: none; }
+.visit-list li { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 14px; font-size: 15px; line-height: 1.45; color: var(--on-dark-2); }
+.visit-list li::before { content: ''; width: 10px; height: 10px; margin-top: 6px; background: var(--accent); }
 .prices-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 64px; align-items: start; }
 .prices-intro p { margin-top: 16px; font-size: 17px; color: var(--on-dark-2); max-width: 24em; }
 .prices-intro .btn { margin-top: 28px; }
@@ -957,7 +996,7 @@ img, svg { display: block; }
 
 /* ---------- этапы ---------- */
 
-.process-section { background: var(--sky-100); }
+.process-section { background: var(--sky-50); }
 .steps {
   position: relative;
   display: grid;
@@ -1004,37 +1043,53 @@ img, svg { display: block; }
   background: var(--blue-600);
   transform-origin: left;
 }
-.steps h3 { margin-top: 22px; font-size: 17px; }
+.step-icon { display: block; width: 30px; height: 30px; margin-top: 24px; stroke: var(--blue-600); }
+.steps h3 { margin-top: 14px; font-size: 17px; }
 .steps p { margin-top: 8px; font-size: 15px; line-height: 1.5; color: var(--muted); }
 .js .steps li::after { transform: scaleX(0); transition: transform 0.45s ease-in-out; }
+.js .steps li .step-icon,
 .js .steps li h3,
 .js .steps li p { opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease, transform 0.6s var(--ease-out); }
 .steps.is-in li::before { background: var(--blue-600); color: #fff; }
 .steps.is-in li::after { transform: scaleX(1); }
+.steps.is-in li .step-icon,
 .steps.is-in li h3,
 .steps.is-in li p { opacity: 1; transform: none; }
-.steps li:nth-child(1)::before, .steps li:nth-child(1) h3, .steps li:nth-child(1) p { transition-delay: 0.1s; }
+.steps li:nth-child(1)::before, .steps li:nth-child(1) .step-icon, .steps li:nth-child(1) h3, .steps li:nth-child(1) p { transition-delay: 0.1s; }
 .steps li:nth-child(1)::after { transition-delay: 0.35s; }
-.steps li:nth-child(2)::before, .steps li:nth-child(2) h3, .steps li:nth-child(2) p { transition-delay: 0.8s; }
+.steps li:nth-child(2)::before, .steps li:nth-child(2) .step-icon, .steps li:nth-child(2) h3, .steps li:nth-child(2) p { transition-delay: 0.8s; }
 .steps li:nth-child(2)::after { transition-delay: 1.05s; }
-.steps li:nth-child(3)::before, .steps li:nth-child(3) h3, .steps li:nth-child(3) p { transition-delay: 1.5s; }
+.steps li:nth-child(3)::before, .steps li:nth-child(3) .step-icon, .steps li:nth-child(3) h3, .steps li:nth-child(3) p { transition-delay: 1.5s; }
 .steps li:nth-child(3)::after { transition-delay: 1.75s; }
-.steps li:nth-child(4)::before, .steps li:nth-child(4) h3, .steps li:nth-child(4) p { transition-delay: 2.2s; }
+.steps li:nth-child(4)::before, .steps li:nth-child(4) .step-icon, .steps li:nth-child(4) h3, .steps li:nth-child(4) p { transition-delay: 2.2s; }
 .steps li:nth-child(4)::after { transition-delay: 2.45s; }
-.steps li:nth-child(5)::before, .steps li:nth-child(5) h3, .steps li:nth-child(5) p { transition-delay: 2.9s; }
+.steps li:nth-child(5)::before, .steps li:nth-child(5) .step-icon, .steps li:nth-child(5) h3, .steps li:nth-child(5) p { transition-delay: 2.9s; }
 
 /* ---------- отзывы ---------- */
 
-.reviews-section { background: var(--sky-50); }
+.reviews-section { background: #fff; }
 .reviews-links { font-size: 15px; color: var(--muted); }
 .reviews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; list-style: none; margin: 0; padding: 0; }
 .review {
   display: flex;
   flex-direction: column;
   padding: 28px;
-  background: #fff;
+  position: relative;
+  background: var(--sky-50);
+  border: 1px solid var(--line);
   border-radius: var(--radius-l);
-  box-shadow: 0 1px 0 var(--line);
+}
+/* крупная кавычка в углу */
+.review::after {
+  content: '\201D';
+  position: absolute;
+  top: 6px;
+  right: 22px;
+  font-size: 96px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--sky-200);
+  pointer-events: none;
 }
 .review-tag {
   align-self: flex-start;
@@ -1046,8 +1101,22 @@ img, svg { display: block; }
   color: var(--blue-700);
 }
 .review blockquote { flex: 1; margin-top: 18px; font-size: 16px; line-height: 1.6; }
-.review-author { margin-top: 22px; padding-left: 14px; border-left: 3px solid var(--sky-300); font-size: 15px; font-weight: 600; }
-.review-author span { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
+.review-author { display: flex; align-items: center; gap: 12px; margin-top: 22px; font-size: 15px; font-weight: 600; }
+.review-author .review-avatar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--blue-600);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+}
+.review:nth-child(2) .review-avatar { background: var(--sky-400); }
+.review:nth-child(3) .review-avatar { background: var(--navy-800); }
+.review-who span { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
 
 /* ---------- вопросы и ответы ---------- */
 
@@ -1055,6 +1124,25 @@ img, svg { display: block; }
 .faq-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: start; }
 .faq-grid .section-head { position: sticky; top: calc(var(--header-h, 72px) + 24px); margin-bottom: 0; }
 .faq-grid .section-head .btn { margin-top: 24px; }
+.faq-wa {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 380px;
+  margin-top: 28px;
+  padding: 16px 18px;
+  background: #fff;
+  border-radius: var(--radius-l);
+  box-shadow: 0 1px 0 var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s;
+}
+.faq-wa:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -18px rgba(6, 25, 58, 0.45); }
+.faq-wa-icon { display: grid; flex-shrink: 0; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #25D366; color: #fff; }
+.faq-wa-icon svg { width: 26px; height: 26px; fill: currentColor; }
+.faq-wa-text { font-size: 14px; line-height: 1.4; color: var(--muted); }
+.faq-wa-text b { display: block; margin-bottom: 2px; font-size: 16px; color: var(--ink); }
 .faq { display: grid; gap: 10px; }
 .faq-item { background: #fff; border-radius: var(--radius-l); box-shadow: 0 1px 0 var(--line); }
 .faq-item summary {
@@ -1108,7 +1196,14 @@ img, svg { display: block; }
 /* ---------- финальный блок ---------- */
 
 .cta-band { position: relative; padding: 112px 0 104px; background: var(--navy-800); color: #fff; overflow: hidden; }
-.cta-band .planet { z-index: 0; }
+/* облака уже загружены на главном экране — до запуска видео показываем кадр-заставку */
+.cta-sky { background: url(../video/sky-poster.jpg) center / cover no-repeat; }
+.cta-sky::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(11, 42, 87, 0.95) 0%, rgba(11, 42, 87, 0.84) 46%, rgba(14, 58, 120, 0.42) 100%);
+}
 .cta-inner { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 48px; }
 .cta-band h2 { max-width: 16em; font-size: clamp(28px, 2.9vw, 40px); }
 .cta-band p { margin-top: 14px; font-size: 18px; color: var(--on-dark-2); }
@@ -1172,6 +1267,9 @@ img, svg { display: block; }
   .menu-open.site-header { background: var(--navy-800); }
 
   .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .service,
+  .service-lg { grid-column: auto; }
+  .service-lg .service-media { aspect-ratio: 4 / 3; }
   .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -1213,6 +1311,8 @@ img, svg { display: block; }
   .steps p { margin-top: 4px; }
 
   .reviews { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .step-icon { display: none; }
+  .cta-sky::after { background: rgba(11, 42, 87, 0.86); }
   .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .faq-grid .section-head { position: static; }
   .section-head-row { flex-direction: column; align-items: flex-start; }
@@ -1298,9 +1398,16 @@ img, svg { display: block; }
   .order-scheme { width: 84px; height: 84px; }
   .order-scheme svg { max-width: 70px; max-height: 70px; }
 
-  .services { grid-template-columns: minmax(0, 1fr); }
-  .service { padding: 22px 18px 18px; }
-  .service h3 { margin-top: 16px; }
+  .services { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  /* на телефоне обычные услуги — строкой: картинка слева, текст справа */
+  .service:not(.service-lg) { flex-direction: row; }
+  .service:not(.service-lg) .service-media { flex: 0 0 38%; aspect-ratio: auto; min-height: 150px; }
+  .service-body { padding: 16px 16px 14px; }
+  .service h3 { font-size: 17px; }
+  .service-lg h3 { font-size: 21px; }
+  .service p { font-size: 14px; }
+  .service-foot { flex-direction: column; gap: 4px; margin-top: 12px; padding-top: 10px; }
+  .price-panel { padding: 18px 18px 4px; }
 
   .price-table { font-size: 16px; }
   .price-table td { white-space: normal; }

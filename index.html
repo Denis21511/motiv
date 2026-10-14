@@ -110,8 +110,8 @@
     <!-- Главный экран -->
     <section class="hero on-dark" id="top">
       <!-- фон: облака за окном. Видео — Mixkit, бесплатная лицензия (mixkit.co/license), петля склеена без шва -->
-      <div class="hero-sky" aria-hidden="true">
-        <video class="hero-sky-video" autoplay muted loop playsinline preload="auto" poster="assets/video/sky-poster.jpg">
+      <div class="sky hero-sky" aria-hidden="true">
+        <video class="sky-video" autoplay muted loop playsinline preload="auto" poster="assets/video/sky-poster.jpg">
           <source src="assets/video/sky.mp4" type="video/mp4" media="(min-width: 761px)">
           <source src="assets/video/sky-mobile.mp4" type="video/mp4">
         </video>
@@ -179,6 +179,7 @@
     <section class="section calc-section" id="calc">
       <div class="container">
         <div class="section-head" data-reveal>
+          <p class="eyebrow">Расчёт за&nbsp;минуту</p>
           <h2>Калькулятор ремонта</h2>
           <p>Укажите размеры окна и&nbsp;что с&nbsp;ним случилось. Модель покажет, какой элемент нуждается в&nbsp;ремонте, а&nbsp;калькулятор посчитает ориентировочную стоимость.</p>
         </div>
@@ -346,57 +347,74 @@
     <section class="section services-section" id="services">
       <div class="container">
         <div class="section-head" data-reveal>
+          <p class="eyebrow">Что ремонтируем</p>
           <h2>Услуги</h2>
           <p>Ремонтируем пластиковые окна, балконные блоки и&nbsp;двери. Не&nbsp;знаете, что сломалось, — выберите симптом в&nbsp;калькуляторе или пришлите фото.</p>
         </div>
         <ul class="services" data-reveal-group>
-          <li class="service">
-            <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="11" height="15"/><path d="M19 7v10M17 9l2-2 2 2M17 15l2 2 2-2"/></svg></span>
-            <h3>Регулировка окон</h3>
-            <p>Створка прижимается плотно, открывается и&nbsp;закрывается без усилия.</p>
-            <div class="service-foot"><span class="service-price">от 500 ₽ за&nbsp;створку</span><a href="#calc" data-calc-problem="close">Рассчитать</a></div>
+          <li class="service service-lg">
+            <div class="service-media"><img src="assets/img/services/regulirovka.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></div>
+            <div class="service-body">
+              <h3>Регулировка окон</h3>
+              <p>Створка прижимается плотно, открывается и&nbsp;закрывается без усилия.</p>
+              <div class="service-foot"><span class="service-price">от 500 ₽ за&nbsp;створку</span><a href="#calc" data-calc-problem="close">Рассчитать</a></div>
+            </div>
+          </li>
+          <li class="service service-lg">
+            <div class="service-media"><img src="assets/img/services/produvanie.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></div>
+            <div class="service-body">
+              <h3>Устранение продувания</h3>
+              <p>Регулируем прижим и&nbsp;меняем уплотнитель там, где дует.</p>
+              <div class="service-foot"><span class="service-price">от 500 ₽</span><a href="#calc" data-calc-problem="draft">Рассчитать</a></div>
+            </div>
           </li>
           <li class="service">
-            <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17"/><rect x="7.5" y="7.5" width="9" height="9" stroke-dasharray="2.2 2"/></svg></span>
-            <h3>Замена уплотнителя</h3>
-            <p>Меняем затвердевший и&nbsp;порванный уплотнитель по&nbsp;всему контуру.</p>
-            <div class="service-foot"><span class="service-price">от 200 ₽ за&nbsp;пог.&nbsp;м</span><a href="#calc" data-calc-problem="seal">Рассчитать</a></div>
+            <div class="service-media"><img src="assets/img/services/uplotnitel.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></div>
+            <div class="service-body">
+              <h3>Замена уплотнителя</h3>
+              <p>Меняем затвердевший и&nbsp;порванный уплотнитель по&nbsp;всему контуру.</p>
+              <div class="service-foot"><span class="service-price">от 200 ₽ за&nbsp;пог.&nbsp;м</span><a href="#calc" data-calc-problem="seal">Рассчитать</a></div>
+            </div>
           </li>
           <li class="service">
-            <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="2.5" width="7" height="9"/><rect x="10.5" y="8" width="3" height="13.5"/></svg></span>
-            <h3>Замена ручек</h3>
-            <p>Ставим новую ручку вместо сломанной или разболтанной.</p>
-            <div class="service-foot"><span class="service-price">от 700 ₽</span><a href="#calc" data-calc-problem="handle">Рассчитать</a></div>
+            <div class="service-media"><img src="assets/img/services/ruchka.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></div>
+            <div class="service-body">
+              <h3>Замена ручек</h3>
+              <p>Ставим новую ручку вместо сломанной или разболтанной.</p>
+              <div class="service-foot"><span class="service-price">от 700 ₽</span><a href="#calc" data-calc-problem="handle">Рассчитать</a></div>
+            </div>
           </li>
           <li class="service">
-            <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="6.5" height="15"/><rect x="13" y="4.5" width="6.5" height="15"/><path d="M12 2.5v19"/></svg></span>
-            <h3>Ремонт и&nbsp;замена фурнитуры</h3>
-            <p>Петли, ножницы, запорный механизм и&nbsp;ответные планки.</p>
-            <div class="service-foot"><span class="service-price">от 2 500 ₽ за&nbsp;створку</span><a href="#calc" data-calc-problem="hardware">Рассчитать</a></div>
+            <div class="service-media"><img src="assets/img/services/furnitura.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></div>
+            <div class="service-body">
+              <h3>Ремонт и&nbsp;замена фурнитуры</h3>
+              <p>Петли, ножницы, запорный механизм и&nbsp;ответные планки.</p>
+              <div class="service-foot"><span class="service-price">от 2 500 ₽ за&nbsp;створку</span><a href="#calc" data-calc-problem="hardware">Рассчитать</a></div>
+            </div>
           </li>
           <li class="service">
-            <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5l5-2v15l-5 2zM9.5 6.5l5-2v15l-5 2zM15.5 6.5l5-2v15l-5 2z"/></svg></span>
-            <h3>Замена стеклопакета</h3>
-            <p>Одно- и&nbsp;двухкамерные стеклопакеты по&nbsp;размеру вашей створки.</p>
-            <div class="service-foot"><span class="service-price">от 3 000 ₽ за&nbsp;м²</span><a href="#calc" data-calc-problem="glass">Рассчитать</a></div>
+            <div class="service-media"><img src="assets/img/services/steklopaket.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></div>
+            <div class="service-body">
+              <h3>Замена стеклопакета</h3>
+              <p>Одно- и&nbsp;двухкамерные стеклопакеты по&nbsp;размеру вашей створки.</p>
+              <div class="service-foot"><span class="service-price">от 3 000 ₽ за&nbsp;м²</span><a href="#calc" data-calc-problem="glass">Рассчитать</a></div>
+            </div>
           </li>
           <li class="service">
-            <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3M3 19h5"/></svg></span>
-            <h3>Устранение продувания</h3>
-            <p>Регулируем прижим и&nbsp;меняем уплотнитель там, где дует.</p>
-            <div class="service-foot"><span class="service-price">от 500 ₽</span><a href="#calc" data-calc-problem="draft">Рассчитать</a></div>
+            <div class="service-media"><img src="assets/img/services/stvorki.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></div>
+            <div class="service-body">
+              <h3>Ремонт створок</h3>
+              <p>Провисание, перекос, створка задевает раму или не&nbsp;закрывается.</p>
+              <div class="service-foot"><span class="service-price">после диагностики</span><a href="#order" data-order-comment="Ремонт створки: ">Оставить заявку</a></div>
+            </div>
           </li>
           <li class="service">
-            <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17"/><path d="M3.5 3.5L11 7v16.5"/></svg></span>
-            <h3>Ремонт створок</h3>
-            <p>Провисание, перекос, створка задевает раму или не&nbsp;закрывается.</p>
-            <div class="service-foot"><span class="service-price">после диагностики</span><a href="#order" data-order-comment="Ремонт створки: ">Оставить заявку</a></div>
-          </li>
-          <li class="service">
-            <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="2.5" width="13" height="19"/><rect x="8.5" y="5.5" width="7" height="7"/><path d="M15.5 15v3"/></svg></span>
-            <h3>Ремонт пластиковых дверей</h3>
-            <p>Балконные и&nbsp;входные ПВХ-двери: регулировка, петли, замки.</p>
-            <div class="service-foot"><span class="service-price">после диагностики</span><a href="#order" data-order-comment="Ремонт пластиковой двери: ">Оставить заявку</a></div>
+            <div class="service-media"><img src="assets/img/services/dveri.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></div>
+            <div class="service-body">
+              <h3>Ремонт пластиковых дверей</h3>
+              <p>Балконные и&nbsp;входные ПВХ-двери: регулировка, петли, замки.</p>
+              <div class="service-foot"><span class="service-price">после диагностики</span><a href="#order" data-order-comment="Ремонт пластиковой двери: ">Оставить заявку</a></div>
+            </div>
           </li>
         </ul>
       </div>
@@ -404,13 +422,23 @@
 
     <!-- Цены -->
     <section class="section prices-section on-dark" id="prices">
-      <div class="pixel-edge" data-edge="top" style="--edge: var(--sky-50)" aria-hidden="true"></div>
+      <div class="pixel-edge" data-edge="top" style="--edge: #fff" aria-hidden="true"></div>
       <div class="container prices-grid">
         <div class="prices-intro" data-reveal>
+          <p class="eyebrow">Без сюрпризов</p>
           <h2>Цены</h2>
           <p>Цены ориентировочные. Точную стоимость мастер называет после диагностики — до&nbsp;начала работ.</p>
           <a class="btn btn-sky" href="#calc">Рассчитать для своего окна</a>
+          <div class="visit">
+            <h3>Как мастер работает на&nbsp;выезде</h3>
+            <ul class="visit-list">
+              <li>Осматривает окно и&nbsp;находит причину неисправности</li>
+              <li>Называет точную стоимость до&nbsp;начала работ</li>
+              <li>Ремонтирует и&nbsp;проверяет окно вместе с&nbsp;вами</li>
+            </ul>
+          </div>
         </div>
+        <div class="price-panel">
         <table class="price-table" data-animate>
           <caption class="sr-only">Ориентировочные цены на ремонт окон</caption>
           <thead>
@@ -425,22 +453,24 @@
             <tr><th scope="row">Комплексный ремонт</th><td><b data-count="1500" data-prefix="от ">от 1 500 ₽</b> за&nbsp;окно</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
-      <div class="pixel-edge" data-edge="bottom" style="--edge: var(--sky-100)" aria-hidden="true"></div>
+      <div class="pixel-edge" data-edge="bottom" style="--edge: var(--sky-50)" aria-hidden="true"></div>
     </section>
 
     <!-- Как проходит ремонт -->
     <section class="section process-section" id="process">
       <div class="container">
         <div class="section-head" data-reveal>
+          <p class="eyebrow">Пять шагов</p>
           <h2>Как проходит ремонт</h2>
         </div>
         <ol class="steps" data-animate>
-          <li><h3>Вы оставляете заявку</h3><p>На&nbsp;сайте или по&nbsp;телефону. К&nbsp;заявке можно приложить фото окна.</p></li>
-          <li><h3>Мастер связывается с&nbsp;вами</h3><p>Уточняет, что случилось, и&nbsp;договаривается о&nbsp;времени выезда.</p></li>
-          <li><h3>Проводится диагностика</h3><p>Мастер осматривает окно на&nbsp;месте и&nbsp;определяет, что нужно отремонтировать или заменить.</p></li>
-          <li><h3>Согласовывается стоимость</h3><p>Вы узнаёте точную цену до&nbsp;начала работ и&nbsp;решаете, выполнять ли ремонт.</p></li>
-          <li><h3>Выполняется ремонт</h3><p>Мастер ремонтирует окно и&nbsp;проверяет его работу вместе с&nbsp;вами.</p></li>
+          <li><svg class="icon step-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><h3>Вы оставляете заявку</h3><p>На&nbsp;сайте или по&nbsp;телефону. К&nbsp;заявке можно приложить фото окна.</p></li>
+          <li><svg class="icon step-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg><h3>Мастер связывается с&nbsp;вами</h3><p>Уточняет, что случилось, и&nbsp;договаривается о&nbsp;времени выезда.</p></li>
+          <li><svg class="icon step-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg><h3>Проводится диагностика</h3><p>Мастер осматривает окно на&nbsp;месте и&nbsp;определяет, что нужно отремонтировать или заменить.</p></li>
+          <li><svg class="icon step-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 20V4h5a4 4 0 0 1 0 8H6.5M6.5 16H14"/></svg><h3>Согласовывается стоимость</h3><p>Вы узнаёте точную цену до&nbsp;начала работ и&nbsp;решаете, выполнять ли ремонт.</p></li>
+          <li><svg class="icon step-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l8.3-8.3"/><path d="M12.3 11.7a4.8 4.8 0 0 1 6.2-6.9L15.6 7.7l.7 2 2 .7 2.9-2.9a4.8 4.8 0 0 1-6.9 6.2"/></svg><h3>Выполняется ремонт</h3><p>Мастер ремонтирует окно и&nbsp;проверяет его работу вместе с&nbsp;вами.</p></li>
         </ol>
       </div>
     </section>
@@ -449,24 +479,27 @@
     <section class="section reviews-section" id="reviews">
       <div class="container">
         <div class="section-head section-head-row" data-reveal>
-          <h2>Отзывы</h2>
+          <div>
+            <p class="eyebrow">Клиенты о&nbsp;нас</p>
+            <h2>Отзывы</h2>
+          </div>
           <p class="reviews-links">Все отзывы — на&nbsp;<a href="#" rel="noopener">Яндекс Картах</a> и&nbsp;в&nbsp;<a href="#" rel="noopener">2ГИС</a></p>
         </div>
         <ul class="reviews" data-reveal-group>
           <li class="review">
             <p class="review-tag">Продувало окно</p>
             <blockquote>Зимой из-под створки на&nbsp;кухне тянуло холодом. Мастер отрегулировал прижим и&nbsp;поменял уплотнитель на&nbsp;обеих створках, всё заняло около часа.</blockquote>
-            <p class="review-author">Ольга<span>Курчатовский район</span></p>
+            <p class="review-author"><span class="review-avatar" aria-hidden="true">О</span><span class="review-who">Ольга<span>Курчатовский район</span></span></p>
           </li>
           <li class="review">
             <p class="review-tag">Сломалась ручка</p>
             <blockquote>Ручка на&nbsp;балконной двери прокручивалась, дверь перестала закрываться. Ручку заменили, заодно подтянули петли — дверь больше не&nbsp;провисает.</blockquote>
-            <p class="review-author">Андрей<span>Калининский район</span></p>
+            <p class="review-author"><span class="review-avatar" aria-hidden="true">А</span><span class="review-who">Андрей<span>Калининский район</span></span></p>
           </li>
           <li class="review">
             <p class="review-tag">Треснул стеклопакет</p>
             <blockquote>Отправила фото трещины через сайт, мастер перезвонил и&nbsp;назвал примерную стоимость. Приехал на&nbsp;замер, потом поставил новый стеклопакет.</blockquote>
-            <p class="review-author">Наталья<span>Тракторозаводский район</span></p>
+            <p class="review-author"><span class="review-avatar" aria-hidden="true">Н</span><span class="review-who">Наталья<span>Тракторозаводский район</span></span></p>
           </li>
         </ul>
       </div>
@@ -476,9 +509,14 @@
     <section class="section faq-section" id="faq">
       <div class="container faq-grid">
         <div class="section-head" data-reveal>
+          <p class="eyebrow">Частые вопросы</p>
           <h2>Вопросы и&nbsp;ответы</h2>
           <p>Не&nbsp;нашли ответ — позвоните или напишите, мастер подскажет.</p>
           <a class="btn btn-outline" href="tel:+73512220300">Позвонить: 222-03-00</a>
+          <a class="faq-wa" href="https://wa.me/79823638707?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9D%D1%83%D0%B6%D0%B5%D0%BD%20%D1%80%D0%B5%D0%BC%D0%BE%D0%BD%D1%82%20%D0%BE%D0%BA%D0%BD%D0%B0." target="_blank" rel="noopener">
+            <span class="faq-wa-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.2 21.8l4.9-1.3A9.8 9.8 0 1 0 12 2.2zm0 17.8a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.8 1c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a.9.9 0 0 0-.7.3 2.8 2.8 0 0 0-.9 2.1 4.9 4.9 0 0 0 1 2.6 11.2 11.2 0 0 0 4.3 3.8c1.6.7 2.2.7 3 .6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.5-.2z"/></svg></span>
+            <span class="faq-wa-text"><b>Пришлите фото в&nbsp;WhatsApp</b>Мастер посмотрит и&nbsp;подскажет, что с&nbsp;окном</span>
+          </a>
         </div>
         <div class="faq" data-reveal-group>
           <details class="faq-item">
@@ -512,7 +550,12 @@
     <!-- Финальный блок -->
     <section class="cta-band on-dark">
       <div class="pixel-edge" data-edge="top" style="--edge: var(--sky-100)" aria-hidden="true"></div>
-      <canvas class="planet" aria-hidden="true"></canvas>
+      <div class="sky cta-sky" aria-hidden="true">
+        <video class="sky-video" muted loop playsinline preload="none" poster="assets/video/sky-poster.jpg">
+          <source src="assets/video/sky.mp4" type="video/mp4" media="(min-width: 761px)">
+          <source src="assets/video/sky-mobile.mp4" type="video/mp4">
+        </video>
+      </div>
       <div class="container cta-inner" data-reveal-group>
         <div>
           <h2>Окно продувает, плохо закрывается или не&nbsp;работает ручка?</h2>

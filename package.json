@@ -5,7 +5,8 @@
   "scripts": {
     "build": "esbuild src/site.js src/app.js --bundle --minify --format=esm --target=es2020 --outdir=assets/js",
     "watch": "esbuild src/site.js src/app.js --bundle --format=esm --target=es2020 --sourcemap --outdir=assets/js --watch",
-    "logo": "node scripts/build-logo.mjs"
+    "logo": "node scripts/build-logo.mjs",
+    "render:services": "node scripts/render-services.mjs"
   },
   "type": "module",
   "devDependencies": {

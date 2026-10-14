@@ -1,5 +1,5 @@
 // Лёгкий скрипт оформления: запускается сразу, не дожидаясь 3D и калькулятора (app.js).
-import { PixelPlanet, initReveal, splitWords, initCounters, initPixelEdges, initHeader } from './effects.js';
+import { initReveal, splitWords, initCounters, initPixelEdges, initHeader } from './effects.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -11,28 +11,28 @@ window.__motivFx = true;
 splitWords($('.hero h1'));
 requestAnimationFrame(() => $('.hero')?.classList.add('is-in'));
 
-/* облака за окном: проявляются, когда видео пошло; вне экрана — на паузе */
-const sky = $('.hero-sky');
-const skyVideo = $('.hero-sky-video');
-if (sky && skyVideo) {
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* облака: на главном экране и в финальном блоке. Проявляются, когда видео пошло; вне экрана — на паузе */
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+$$('.sky').forEach((sky) => {
+  const video = $('.sky-video', sky);
+  if (!video) return;
   const ready = () => sky.classList.add('is-ready');
   if (still) {
     // без движения: остаётся кадр-заставка
-    skyVideo.removeAttribute('autoplay');
-    skyVideo.pause();
+    video.removeAttribute('autoplay');
+    video.pause();
     ready();
-  } else {
-    if (skyVideo.readyState >= 3) ready();
-    skyVideo.addEventListener('playing', ready, { once: true });
-    // если автозапуск запрещён (режим энергосбережения) — показываем заставку
-    skyVideo.play()?.catch(ready);
-    new IntersectionObserver(([en]) => {
-      if (en.isIntersecting) skyVideo.play()?.catch(() => {});
-      else skyVideo.pause();
-    }).observe(sky);
+    return;
   }
-}
+  if (video.readyState >= 3) ready();
+  video.addEventListener('playing', ready, { once: true });
+  // если автозапуск запрещён (режим энергосбережения) — показываем заставку
+  if (video.autoplay) video.play()?.catch(ready);
+  new IntersectionObserver(([en]) => {
+    if (en.isIntersecting) video.play()?.catch(ready);
+    else video.pause();
+  }).observe(sky);
+});
 
 /* «Цена по фото»: сразу открываем выбор фото и переходим к заявке */
 $$('[data-photo-quote]').forEach((a) =>
@@ -44,19 +44,6 @@ $$('[data-photo-quote]').forEach((a) =>
     input.click();
   }),
 );
-
-const ctaPlanet = $('.cta-band .planet');
-if (ctaPlanet) {
-  new PixelPlanet(ctaPlanet, {
-    host: ctaPlanet.parentElement,
-    cells: 25,
-    size: 1.5,
-    center: [0.86, 0.62],
-    tones: ['#0F3466', '#133D75', '#184886', '#1E5498', '#2862AB'],
-    orbit: '#5AAEEA',
-    assemble: false,
-  });
-}
 
 /* ---------- прокрутка ---------- */
 
