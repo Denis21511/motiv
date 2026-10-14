@@ -572,12 +572,29 @@
         <div class="compare" style="--pos: 50%" data-reveal>
           <div class="compare-layer compare-cold">
             <span class="frost" aria-hidden="true"></span>
+            <span class="sill" aria-hidden="true"></span>
             <img src="assets/img/compare/cold.webp" width="1200" height="900" alt="Окно до ремонта: из-под створки дует" loading="lazy" decoding="async">
             <span class="gusts" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
           </div>
           <div class="compare-layer compare-warm">
             <span class="glow" aria-hidden="true"></span>
+            <span class="lamp" aria-hidden="true"></span>
             <img src="assets/img/compare/warm.webp" width="1200" height="900" alt="Окно после ремонта: створка прижата плотно" loading="lazy" decoding="async">
+            <span class="sill" aria-hidden="true"></span>
+            <span class="mug" aria-hidden="true">
+              <svg class="steam" viewBox="0 0 60 70"><path d="M16 66c-7-9 6-15 0-25s5-17 1-27"/><path d="M30 68c-7-10 7-16 0-27s6-18 1-29"/><path d="M44 66c-7-9 6-15 0-25s5-17 1-27"/></svg>
+              <svg class="mug-body" viewBox="0 0 70 58">
+                <defs>
+                  <linearGradient id="mug-g" x1="0" x2="1"><stop offset="0" stop-color="#E8774B"/><stop offset=".55" stop-color="#D2603A"/><stop offset="1" stop-color="#9E3F25"/></linearGradient>
+                </defs>
+                <ellipse cx="30" cy="54" rx="24" ry="3.5" fill="rgba(40,18,6,.45)"/>
+                <path d="M52 18h3.5a9.5 9.5 0 0 1 0 19H51" fill="none" stroke="#B34C2D" stroke-width="5.5"/>
+                <path d="M8 11h44v29a13 13 0 0 1-13 13H21A13 13 0 0 1 8 40z" fill="url(#mug-g)"/>
+                <path d="M14 16v22" stroke="rgba(255,226,200,.45)" stroke-width="3" stroke-linecap="round"/>
+                <ellipse cx="30" cy="11" rx="22" ry="5" fill="#5A2A16"/>
+                <ellipse cx="30" cy="11" rx="22" ry="5" fill="none" stroke="#F6D2BA" stroke-width="2"/>
+              </svg>
+            </span>
           </div>
           <span class="compare-tag compare-tag-cold"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M4.2 6.5l15.6 11M4.2 17.5l15.6-11M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5"/></svg>До&nbsp;ремонта</span>
           <span class="compare-tag compare-tag-warm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11.5L12 4l8.5 7.5M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/></svg>После</span>

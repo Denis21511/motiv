@@ -38,6 +38,37 @@ $$('.sky').forEach((sky) => {
 
 $$('.compare').forEach((box) => {
   const range = $('.compare-range', box);
+
+  // снег на стороне «Было»: мелкий за окном, крупные снежинки перед ним
+  const cold = $('.compare-cold', box);
+  if (cold) {
+    const layer = (cls, count, big) => {
+      const wrap = document.createElement('span');
+      wrap.className = `snow ${cls}`;
+      wrap.setAttribute('aria-hidden', 'true');
+      let html = '';
+      for (let i = 0; i < count; i++) {
+        const size = big ? 16 + Math.random() * 14 : 2.5 + Math.random() * 4.5;
+        const dur = (big ? 10 : 6) + Math.random() * 6;
+        const style = [
+          `left:${(Math.random() * 100).toFixed(1)}%`,
+          `--s:${size.toFixed(1)}px`,
+          `--d:${dur.toFixed(1)}s`,
+          `--delay:${(-Math.random() * dur).toFixed(1)}s`,
+          `--sway:${(2.4 + Math.random() * 2).toFixed(1)}s`,
+          `--o:${(0.55 + Math.random() * 0.45).toFixed(2)}`,
+          `--y:${Math.round(Math.random() * 100)}%`,
+        ].join(';');
+        html += `<i${big ? ' class="flake"' : ''} style="${style}"></i>`;
+      }
+      wrap.innerHTML = html;
+      return wrap;
+    };
+    cold.insertBefore(layer('snow-back', 70, false), $('img', cold));
+    cold.appendChild(layer('snow-front', 14, true));
+  }
+  // вне экрана снег и сквозняк не крутим
+  new IntersectionObserver(([en]) => box.classList.toggle('is-off', !en.isIntersecting)).observe(box);
   let pos = 50;
   let hint = 0;
   const set = (v) => {
