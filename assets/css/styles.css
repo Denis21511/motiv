@@ -181,7 +181,16 @@ img, svg { display: block; }
 .header-inner { height: var(--header-h); display: flex; align-items: center; gap: 28px; }
 
 .brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; flex-shrink: 0; }
-.brand-mark { width: 46px; height: 47px; }
+.brand-plate {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px -8px rgba(6, 25, 58, 0.55);
+}
+.brand-mark { width: 50px; height: auto; }
 .brand-text { display: flex; flex-direction: column; }
 .brand-name { font-size: 23px; font-weight: 650; line-height: 1; letter-spacing: -0.025em; }
 .brand-tag { margin-top: 4px; font-size: 12px; line-height: 1.2; color: var(--on-dark-2); white-space: nowrap; }
@@ -1855,7 +1864,8 @@ img, svg { display: block; }
   body { font-size: 16px; }
   h1 { font-size: 36px; }
   .brand-name { font-size: 21px; }
-  .brand-mark { width: 40px; height: 41px; }
+  .brand-plate { width: 50px; height: 50px; border-radius: 10px; }
+  .brand-mark { width: 43px; }
   /* «Скорая помощь 🚑» всегда в одну строку: кегль подстраивается под ширину экрана */
   .hero-copy .hero-title { font-size: min(40px, calc((100vw - 32px) / 9.8)); }
   .hero-title .line-sub { font-size: 0.8em; }
