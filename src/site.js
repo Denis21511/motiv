@@ -1,6 +1,7 @@
 // Лёгкий скрипт оформления: запускается сразу, не дожидаясь 3D и калькулятора (app.js).
 import { initReveal, splitWords, initCounters, initPixelEdges, initHeader } from './effects.js';
 import { initDistrictMap } from './map.js';
+import { initClouds } from './clouds.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -12,28 +13,10 @@ window.__motivFx = true;
 splitWords($('.hero h1'));
 requestAnimationFrame(() => $('.hero')?.classList.add('is-in'));
 
-/* облака: на главном экране и в финальном блоке. Проявляются, когда видео пошло; вне экрана — на паузе */
+/* облака: на главном экране, в ценах и финальном блоке — рисуются сами, без видео */
+initClouds();
+
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-$$('.sky').forEach((sky) => {
-  const video = $('.sky-video', sky);
-  if (!video) return;
-  const ready = () => sky.classList.add('is-ready');
-  if (still) {
-    // без движения: остаётся кадр-заставка
-    video.removeAttribute('autoplay');
-    video.pause();
-    ready();
-    return;
-  }
-  if (video.readyState >= 3) ready();
-  video.addEventListener('playing', ready, { once: true });
-  // если автозапуск запрещён (режим энергосбережения) — показываем заставку
-  if (video.autoplay) video.play()?.catch(ready);
-  new IntersectionObserver(([en]) => {
-    if (en.isIntersecting) video.play()?.catch(ready);
-    else video.pause();
-  }).observe(sky);
-});
 
 /* ---------- было / стало: ползунок ---------- */
 
