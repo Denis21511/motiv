@@ -396,58 +396,69 @@ const QUIZ_ICONS = {
   handle: '<rect x="8.5" y="2.5" width="7" height="9"/><rect x="10.5" y="8" width="3" height="13.5"/>',
   glass: '<path d="M3.5 6.5l5-2v15l-5 2zM9.5 6.5l5-2v15l-5 2zM15.5 6.5l5-2v15l-5 2z"/>',
   all: '<rect x="3.5" y="3.5" width="7" height="7"/><rect x="13.5" y="3.5" width="7" height="7"/><rect x="3.5" y="13.5" width="7" height="7"/><rect x="13.5" y="13.5" width="7" height="7"/>',
-  s1: '<rect x="7" y="3.5" width="10" height="17"/>',
-  s2: '<rect x="3.5" y="3.5" width="17" height="17"/><path d="M12 3.5v17"/>',
-  s3: '<rect x="2.5" y="3.5" width="19" height="17"/><path d="M8.8 3.5v17M15.2 3.5v17"/>',
+  ok: '<circle cx="12" cy="12" r="8.5"/><path d="M8 12.5l2.8 2.8L16.5 9.5"/>',
+  crack: '<path d="M4 4h16v16H4z"/><path d="M11 4l-2 5 4 3-3 4 2 4"/>',
+  ask: '<circle cx="12" cy="12" r="8.5"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.5v.7M12 17v.01"/>',
+  sag: '<rect x="4" y="3.5" width="16" height="17"/><path d="M7 7l10 2v9H7z"/>',
+  force: '<path d="M4 12h12M12 7l5 5-5 5"/><path d="M20 5v14"/>',
+  stuck: '<rect x="5" y="10" width="14" height="10" rx="1"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+  loose: '<rect x="9" y="3" width="6" height="8"/><path d="M12 11v10M8.5 15.5l-2 1M15.5 15.5l2 1"/>',
+  // схемы окон: рама, створки и треугольник открывания
+  s1: '<rect x="18" y="6" width="28" height="52" rx="1"/><rect x="22" y="10" width="20" height="44"/><path d="M42 10L22 32l20 22" stroke-dasharray="3 3"/>',
+  s2: '<rect x="6" y="6" width="52" height="52" rx="1"/><path d="M32 6v52"/><rect x="10" y="10" width="18" height="44"/><rect x="36" y="10" width="18" height="44"/><path d="M28 10L10 32l18 22" stroke-dasharray="3 3"/>',
+  s3: '<rect x="2" y="10" width="60" height="44" rx="1"/><path d="M22 10v44M42 10v44"/><rect x="5" y="13" width="14" height="38"/><rect x="45" y="13" width="14" height="38"/><path d="M19 13L5 32l14 19" stroke-dasharray="3 3"/>',
 };
 
 const QUIZ = {
   start: {
     q: 'Что беспокоит больше всего?',
     options: [
-      { t: 'Дует, холодно у окна', icon: 'wind', next: 'draft' },
-      { t: 'Створка плохо закрывается или открывается', icon: 'sash', next: 'sash' },
-      { t: 'Ручка болтается или не поворачивается', icon: 'handle', next: 'handle' },
-      { t: 'Треснуло стекло или запотело между стёклами', icon: 'glass', result: 'glass' },
-      { t: 'Всё понемногу', icon: 'all', result: 'complex' },
+      { t: 'Дует, холодно у окна', img: 'produvanie', next: 'draft' },
+      { t: 'Створка плохо закрывается или открывается', img: 'stvorki', next: 'sash' },
+      { t: 'Ручка болтается или не поворачивается', img: 'ruchka', next: 'handle' },
+      { t: 'Треснуло стекло или запотело между стёклами', img: 'steklopaket', result: 'glass' },
+      { t: 'Всё понемногу', img: 'furnitura', result: 'complex' },
     ],
   },
   draft: {
     q: 'Потрогайте уплотнитель — резинку по краю створки. Какой он?',
     options: [
-      { t: 'Мягкий и целый', result: 'close' },
-      { t: 'Твёрдый, потрескался или порван', result: 'draft' },
-      { t: 'Не знаю', result: 'draft' },
+      { t: 'Мягкий и целый', icon: 'ok', result: 'close' },
+      { t: 'Твёрдый, потрескался или порван', icon: 'crack', result: 'draft' },
+      { t: 'Не знаю', icon: 'ask', result: 'draft' },
     ],
   },
   sash: {
     q: 'Что происходит со створкой?',
     options: [
-      { t: 'Задевает раму или провисла', result: 'close' },
-      { t: 'Закрывается с большим усилием', result: 'close' },
-      { t: 'Не закрывается до конца или заклинило', result: 'hardware' },
+      { t: 'Задевает раму или провисла', icon: 'sag', result: 'close' },
+      { t: 'Закрывается с большим усилием', icon: 'force', result: 'close' },
+      { t: 'Не закрывается до конца или заклинило', icon: 'stuck', result: 'hardware' },
     ],
   },
   handle: {
     q: 'Что с ручкой?',
     options: [
-      { t: 'Болтается, прокручивается или сломана', result: 'handle' },
-      { t: 'Поворачивается очень туго', result: 'close' },
-      { t: 'Не поворачивается совсем', result: 'hardware' },
+      { t: 'Болтается, прокручивается или сломана', icon: 'loose', result: 'handle' },
+      { t: 'Поворачивается очень туго', icon: 'force', result: 'close' },
+      { t: 'Не поворачивается совсем', icon: 'stuck', result: 'hardware' },
     ],
   },
   sashes: {
     q: 'Сколько створок в окне?',
     options: [
-      { t: 'Одна', icon: 's1', sashes: 1 },
-      { t: 'Две', icon: 's2', sashes: 2 },
-      { t: 'Три', icon: 's3', sashes: 3 },
+      { t: 'Одна створка', win: 's1', sashes: 1 },
+      { t: 'Две створки', win: 's2', sashes: 2 },
+      { t: 'Три створки', win: 's3', sashes: 3 },
     ],
   },
 };
 
 // типовые размеры окна по числу створок, мм
 const QUIZ_SIZE = { 1: [800, 1400], 2: [1400, 1400], 3: [2000, 1400] };
+
+const QUIZ_IMG = { close: 'regulirovka', draft: 'produvanie', handle: 'ruchka', hardware: 'furnitura', glass: 'steklopaket', complex: 'uplotnitel' };
+const QUIZ_STEPS = ['Что случилось', 'Подробности', 'Окно'];
 
 const QUIZ_RESULT = {
   close: { title: 'Регулировка створок', why: 'Створка сместилась или прижимается неплотно. Обычно хватает регулировки петель и прижима.' },
@@ -464,36 +475,48 @@ if (quizEl) {
   const icon = (name) => (name ? `<svg viewBox="0 0 24 24" aria-hidden="true">${QUIZ_ICONS[name]}</svg>` : '');
 
   const render = (focus = false) => {
+    // шаги сверху: текущий, пройденные (и пропущенный, если причина ясна сразу)
+    const cur = q.node === 'start' ? 0 : q.node === 'sashes' ? 2 : q.node === 'result' ? 3 : 1;
+    const steps = `<ol class="quiz-steps">${QUIZ_STEPS.map(
+      (t, i) => `<li class="${i < cur ? 'is-done' : i === cur ? 'is-current' : ''}"><span>${t}</span></li>`,
+    ).join('')}</ol>`;
     let html;
     if (q.node === 'result') {
       const [width, height] = QUIZ_SIZE[q.sashes];
       const est = estimate({ width, height, sashes: q.sashes, problem: q.problem });
       const r = QUIZ_RESULT[q.problem];
       const sashWord = plural(q.sashes, 'створка', 'створки', 'створок');
-      html = `<div class="quiz-body quiz-result">
-        <p class="quiz-label">Скорее всего, нужно</p>
-        <h3 tabindex="-1">${r.title}</h3>
-        <p class="quiz-why">${r.why}</p>
-        <div class="quiz-price"><span>Ориентировочно</span><b>${rub(est.total)}</b><small>для типового окна ${width} × ${height} мм, ${q.sashes} ${sashWord}</small></div>
-        <ul class="quiz-lines">${est.lines.map((l) => `<li><span>${l.label}</span><span>${rub(l.sum)}</span></li>`).join('')}</ul>
-        <div class="quiz-actions">
-          <a class="btn btn-accent btn-lg" href="#order" data-quiz-go="order">Вызвать мастера</a>
-          <a class="btn btn-outline btn-lg" href="#calc" data-quiz-go="calc">Уточнить размеры</a>
+      html = `${steps}<div class="quiz-body quiz-result">
+        <div class="quiz-result-media"><img src="assets/img/services/${QUIZ_IMG[q.problem]}.webp" width="1200" height="900" alt=""></div>
+        <div class="quiz-result-info">
+          <p class="quiz-label">Скорее всего, нужно</p>
+          <h3 tabindex="-1">${r.title}</h3>
+          <p class="quiz-why">${r.why}</p>
+          <div class="quiz-price"><span>Ориентировочно</span><b>${rub(est.total)}</b><small>для типового окна ${width} × ${height} мм, ${q.sashes} ${sashWord}</small></div>
+          <ul class="quiz-lines">${est.lines.map((l) => `<li><span>${l.label}</span><span>${rub(l.sum)}</span></li>`).join('')}</ul>
+          <div class="quiz-actions">
+            <a class="btn btn-accent btn-lg" href="#order" data-quiz-go="order">Вызвать мастера</a>
+            <a class="btn btn-outline btn-lg" href="#calc" data-quiz-go="calc">Уточнить размеры</a>
+          </div>
+          <button class="quiz-restart" type="button">↺ Пройти заново</button>
+          <p class="quiz-note">Это предварительная оценка по&nbsp;ответам. Точную причину мастер определит на&nbsp;месте.</p>
         </div>
-        <button class="quiz-restart" type="button">Пройти заново</button>
-        <p class="quiz-note">Это предварительная оценка по&nbsp;ответам. Точную причину мастер определит на&nbsp;месте.</p>
       </div>`;
     } else {
       const node = QUIZ[q.node];
-      // если причина ясна с первого ответа — вопросов два, иначе три
-      const total = q.problem && q.node === 'sashes' && q.history.length === 1 ? 2 : 3;
-      const n = Math.min(total, q.history.length + 1);
-      html = `<div class="quiz-body">
-        <div class="quiz-top"><span>Вопрос ${n} из ${total}</span><span class="quiz-bar"><i style="width:${((n - 1) / total) * 100 + 8}%"></i></span></div>
+      const kind = node.options[0].img ? 'is-tiles' : node.options[0].win ? 'is-windows' : 'is-text';
+      const option = (o, i) => {
+        if (o.img) {
+          return `<button class="quiz-opt quiz-tile" type="button" data-i="${i}"><span class="quiz-tile-media"><img src="assets/img/services/${o.img}.webp" width="1200" height="900" alt="" loading="lazy" decoding="async"></span><span class="quiz-tile-label">${o.t}</span></button>`;
+        }
+        if (o.win) {
+          return `<button class="quiz-opt quiz-win" type="button" data-i="${i}"><svg viewBox="0 0 64 64" aria-hidden="true">${QUIZ_ICONS[o.win]}</svg><span>${o.t}</span></button>`;
+        }
+        return `<button class="quiz-opt" type="button" data-i="${i}">${icon(o.icon)}<span>${o.t}</span></button>`;
+      };
+      html = `${steps}<div class="quiz-body">
         <h3 class="quiz-q" tabindex="-1">${node.q}</h3>
-        <div class="quiz-options">${node.options
-          .map((o, i) => `<button class="quiz-opt" type="button" data-i="${i}">${icon(o.icon)}<span>${o.t}</span></button>`)
-          .join('')}</div>
+        <div class="quiz-options ${kind}">${node.options.map(option).join('')}</div>
         ${q.history.length ? '<button class="quiz-back" type="button">← Назад</button>' : ''}
       </div>`;
     }

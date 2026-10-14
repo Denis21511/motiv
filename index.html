@@ -635,6 +635,34 @@
       </div>
     </section>
 
+    <!-- Карта районов -->
+    <section class="section map-section on-dark" id="districts">
+      <div class="pixel-edge" data-edge="top" style="--edge: #fff" aria-hidden="true"></div>
+      <div class="container map-grid">
+        <div class="map-intro" data-reveal>
+          <p class="eyebrow">География</p>
+          <h2>Выезжаем во&nbsp;все районы Челябинска</h2>
+          <p>Наведите на&nbsp;район или выберите его в&nbsp;списке. Мастер приедет в&nbsp;согласованное время&nbsp;— ежедневно с&nbsp;8:00 до&nbsp;21:00.</p>
+          <ul class="map-list" id="map-list">
+            <li><button type="button" data-d="0"><i aria-hidden="true"></i>Металлургический</button></li>
+            <li><button type="button" data-d="1"><i aria-hidden="true"></i>Курчатовский</button></li>
+            <li><button type="button" data-d="2"><i aria-hidden="true"></i>Калининский</button></li>
+            <li><button type="button" data-d="3"><i aria-hidden="true"></i>Тракторозаводский</button></li>
+            <li><button type="button" data-d="4"><i aria-hidden="true"></i>Центральный</button></li>
+            <li><button type="button" data-d="5"><i aria-hidden="true"></i>Ленинский</button></li>
+            <li><button type="button" data-d="6"><i aria-hidden="true"></i>Советский</button></li>
+          </ul>
+          <a class="btn btn-accent btn-lg" href="#order">Вызвать мастера</a>
+        </div>
+        <div class="map-box" data-reveal>
+          <canvas class="map-canvas" id="map-canvas" role="img" aria-label="Пиксельная карта Челябинска: семь районов, во все выезжает мастер"></canvas>
+          <p class="map-tip" id="map-tip" aria-live="polite"></p>
+          <p class="map-credit">Границы районов: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">участники OpenStreetMap</a></p>
+        </div>
+      </div>
+      <div class="pixel-edge" data-edge="bottom" style="--edge: var(--sky-100)" aria-hidden="true"></div>
+    </section>
+
     <!-- Вопросы и ответы -->
     <section class="section faq-section" id="faq">
       <div class="container faq-grid">

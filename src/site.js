@@ -1,5 +1,6 @@
 // Лёгкий скрипт оформления: запускается сразу, не дожидаясь 3D и калькулятора (app.js).
 import { initReveal, splitWords, initCounters, initPixelEdges, initHeader } from './effects.js';
+import { initDistrictMap } from './map.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -174,6 +175,7 @@ initHeader();
 initPixelEdges();
 initReveal();
 initCounters();
+initDistrictMap();
 
 /* ---------- мобильное меню ---------- */
 
