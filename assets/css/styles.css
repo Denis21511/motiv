@@ -916,6 +916,7 @@ img, svg { display: block; }
   overflow: hidden;
 }
 .service-lg .service-media { aspect-ratio: 16 / 9; }
+.service:nth-child(even) .service-media { background-color: var(--blue-700); }
 .service-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease-out); }
 .service-body { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 20px; }
 .service h3 { font-size: 19px; }
@@ -1193,6 +1194,270 @@ img, svg { display: block; }
 .float-wa svg { width: 30px; height: 30px; fill: currentColor; }
 .float-wa:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 28px -8px rgba(6, 25, 58, 0.6); }
 
+/* ---------- квиз «Что с окном?» ---------- */
+
+.quiz-section { background: #fff; }
+.quiz-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: center; }
+.quiz-grid .section-head { margin-bottom: 0; }
+.quiz {
+  position: relative;
+  min-height: 430px;
+  padding: 32px;
+  background: var(--sky-50);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 30px 60px -40px rgba(6, 25, 58, 0.35);
+}
+.quiz-fallback { color: var(--ink-2); }
+.quiz-top { display: flex; align-items: center; gap: 16px; font-size: 14px; color: var(--muted); white-space: nowrap; }
+.quiz-bar { flex: 1; height: 8px; background: var(--sky-100); border-radius: 4px; overflow: hidden; }
+.quiz-bar i { display: block; height: 100%; background: var(--blue-600); transition: width 0.5s var(--ease-out); }
+.quiz-body.is-enter { animation: quiz-in 0.45s var(--ease-out); }
+@keyframes quiz-in {
+  from { opacity: 0; transform: translateX(18px); }
+}
+.quiz-q { margin-top: 22px; font-size: 24px; line-height: 1.25; outline: none; }
+.quiz-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+.quiz-opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  font: 500 16px/1.35 var(--font);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.25s var(--ease-out), box-shadow 0.25s;
+}
+.quiz-opt:hover { border-color: var(--blue-600); transform: translateY(-2px); box-shadow: 0 12px 24px -16px rgba(6, 25, 58, 0.5); }
+.quiz-opt svg { flex-shrink: 0; width: 28px; height: 28px; fill: none; stroke: var(--blue-600); stroke-width: 1.5; }
+.quiz-opt:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.quiz-back,
+.quiz-restart { margin-top: 18px; padding: 0; background: none; border: 0; color: var(--blue-600); font: 500 14px var(--font); cursor: pointer; }
+.quiz-back:hover,
+.quiz-restart:hover { text-decoration: underline; }
+.quiz-label { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue-600); }
+.quiz-result h3 { margin-top: 8px; font-size: 28px; line-height: 1.2; outline: none; }
+.quiz-why { margin-top: 10px; color: var(--ink-2); line-height: 1.55; }
+.quiz-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin-top: 22px;
+  padding: 18px 22px;
+  background: var(--blue-800);
+  border-radius: 12px;
+  color: #fff;
+}
+.quiz-price span { font-size: 14px; color: var(--on-dark-2); }
+.quiz-price b { font-size: 36px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.quiz-price small { flex-basis: 100%; font-size: 13px; color: var(--on-dark-3); }
+.quiz-lines { display: grid; gap: 4px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 14px; color: var(--muted); }
+.quiz-lines li { display: flex; justify-content: space-between; gap: 12px; }
+.quiz-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.quiz-note { margin-top: 14px; font-size: 13px; color: var(--muted); }
+
+/* ---------- устройство окна: разбирается при прокрутке ---------- */
+
+.anatomy-section {
+  background-color: var(--navy-900);
+  background-image:
+    linear-gradient(rgba(143, 182, 227, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 182, 227, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: #fff;
+}
+.anatomy-head { margin-bottom: 8px; }
+.anatomy-head p { color: var(--on-dark-2); }
+.anatomy-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: start; }
+.anatomy-step {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 64vh;
+  padding: 24px 0;
+  opacity: 0.3;
+  transition: opacity 0.45s ease;
+}
+.anatomy-step.is-active { opacity: 1; }
+.anatomy-num { font-size: 14px; font-weight: 600; letter-spacing: 0.12em; color: var(--sky-300); }
+.anatomy-step h3 { margin-top: 10px; font-size: clamp(26px, 2.6vw, 36px); }
+.anatomy-step p { margin-top: 14px; max-width: 30em; font-size: 17px; line-height: 1.6; color: var(--on-dark-2); }
+.anatomy-step .anatomy-price { display: flex; flex-wrap: wrap; gap: 6px 18px; font-weight: 600; color: #fff; }
+.anatomy-price a { color: var(--accent); font-weight: 500; text-decoration: none; }
+.anatomy-price a:hover { text-decoration: underline; }
+.anatomy-stage {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+  height: calc(100vh - var(--header-h) - 48px);
+  min-height: 460px;
+  max-height: 760px;
+  background-color: var(--blue-800);
+  background-image:
+    linear-gradient(rgba(143, 182, 227, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 182, 227, 0.16) 1px, transparent 1px),
+    linear-gradient(rgba(143, 182, 227, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 182, 227, 0.07) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: -1px -1px;
+  border: 1px solid rgba(143, 182, 227, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.anatomy-viewer { position: absolute; inset: 0; }
+.anatomy-viewer .viewer-hint { left: 50%; transform: translateX(-50%); bottom: 12px; z-index: 2; }
+
+/* ---------- цифры ---------- */
+
+.numbers-section { padding: 88px 0; background: #fff; }
+.numbers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.numbers li { padding: 4px 28px; border-left: 1px solid var(--line); }
+.numbers li:first-child { padding-left: 0; border-left: 0; }
+/* пиксель-акцент над цифрой */
+.numbers li::before { content: ''; display: block; width: 10px; height: 10px; margin-bottom: 20px; background: var(--accent); box-shadow: 14px 0 0 var(--sky-300); }
+.num {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: clamp(46px, 5.2vw, 78px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--blue-700);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.num small { font-size: 0.36em; font-weight: 600; letter-spacing: 0; color: var(--blue-600); }
+.num-text { display: block; max-width: 14em; margin-top: 14px; font-size: 16px; line-height: 1.45; color: var(--muted); }
+
+/* ---------- было / стало ---------- */
+
+.compare-section { background: var(--navy-900); color: #fff; overflow: hidden; }
+/* тёплый свет справа — как от лампы в комнате */
+.compare-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(55% 70% at 88% 62%, rgba(255, 160, 60, 0.2), transparent 70%),
+    radial-gradient(40% 60% at 10% 30%, rgba(63, 162, 245, 0.14), transparent 70%);
+  pointer-events: none;
+}
+.compare-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 56px; align-items: center; }
+.compare-intro p { margin-top: 16px; font-size: 18px; line-height: 1.55; color: var(--on-dark-2); }
+.compare-list { display: grid; gap: 12px; margin: 26px 0 0; padding: 0; list-style: none; }
+.compare-list li { display: flex; align-items: center; gap: 12px; font-size: 16px; }
+.compare-list svg { flex-shrink: 0; width: 26px; height: 26px; fill: none; stroke-width: 1.5; }
+.compare-list .is-cold svg { stroke: var(--sky-300); }
+.compare-list .is-warm svg { stroke: #FFB45E; }
+.compare-intro .btn { margin-top: 32px; }
+
+.compare {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 20px;
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: ew-resize;
+  -webkit-user-select: none;
+  user-select: none;
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.7);
+}
+.compare-layer { position: absolute; inset: 0; }
+.compare-layer img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+.compare-cold { z-index: 0; background: radial-gradient(85% 75% at 50% 40%, #1F5596 0%, #0B2A57 58%, #06193A 100%); }
+.compare-cold img { filter: saturate(0.75) hue-rotate(10deg) brightness(0.92); }
+/* иней по краям */
+.frost {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.42' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .86 0 0 0 0 .94 0 0 0 0 1 0 0 0 2.2 -1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(closest-side, transparent 68%, rgba(0, 0, 0, 0.55) 88%, #000 100%);
+  mask-image: radial-gradient(closest-side, transparent 68%, rgba(0, 0, 0, 0.55) 88%, #000 100%);
+  pointer-events: none;
+}
+/* сквозняк: струйки воздуха от притвора */
+.gusts i {
+  position: absolute;
+  z-index: 3;
+  width: 110px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(225, 242, 255, 0.9), transparent);
+  opacity: 0;
+  animation: gust 2.6s linear infinite;
+}
+.gusts i:nth-child(1) { top: 22%; left: 30%; animation-delay: 0s; }
+.gusts i:nth-child(2) { top: 38%; left: 46%; animation-delay: 0.7s; }
+.gusts i:nth-child(3) { top: 55%; left: 32%; animation-delay: 1.3s; }
+.gusts i:nth-child(4) { top: 70%; left: 48%; animation-delay: 0.35s; }
+.gusts i:nth-child(5) { top: 30%; left: 62%; animation-delay: 1.8s; }
+.gusts i:nth-child(6) { top: 62%; left: 64%; animation-delay: 1s; }
+@keyframes gust {
+  0% { transform: translateX(0); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: translateX(-130px); opacity: 0; }
+}
+.compare-warm {
+  z-index: 1;
+  clip-path: inset(0 0 0 var(--pos));
+  background: radial-gradient(95% 85% at 28% 92%, #7A4416 0%, #3D2615 34%, #1B1724 70%, #0F1526 100%);
+}
+.compare-warm img { filter: sepia(0.32) saturate(1.45) hue-rotate(-12deg) brightness(1.04); }
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(48% 42% at 18% 92%, rgba(255, 184, 96, 0.5), transparent 70%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.compare-tag {
+  position: absolute;
+  top: 16px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+.compare-tag svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.compare-tag-cold { left: 16px; background: rgba(6, 25, 58, 0.6); color: var(--sky-200); }
+.compare-tag-warm { right: 16px; background: rgba(58, 30, 8, 0.6); color: #FFD29A; }
+.compare-handle { position: absolute; top: 0; bottom: 0; left: var(--pos); z-index: 3; width: 2px; margin-left: -1px; background: rgba(255, 255, 255, 0.92); pointer-events: none; }
+.compare-handle span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy-800);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s var(--ease-out);
+}
+.compare-handle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
+.compare.is-dragging .compare-handle span { transform: translate(-50%, -50%) scale(1.1); }
+.compare-range { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.compare-range:focus-visible ~ .compare-handle span { outline: 3px solid var(--accent); outline-offset: 3px; }
+
 /* ---------- финальный блок ---------- */
 
 .cta-band { position: relative; padding: 112px 0 104px; background: var(--navy-800); color: #fff; overflow: hidden; }
@@ -1314,6 +1579,14 @@ img, svg { display: block; }
   .step-icon { display: none; }
   .cta-sky::after { background: rgba(11, 42, 87, 0.86); }
   .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .quiz-grid,
+  .compare-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  /* устройство окна: 3D сверху и «прилипает», шаги прокручиваются под ним */
+  .anatomy-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .anatomy-stage { order: -1; z-index: 2; top: var(--header-h); height: 54vh; min-height: 320px; border-radius: 16px; }
+  .anatomy-step { min-height: 56vh; }
+  .numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
+  .numbers li:nth-child(3) { padding-left: 0; border-left: 0; }
   .faq-grid .section-head { position: static; }
   .section-head-row { flex-direction: column; align-items: flex-start; }
 
@@ -1415,6 +1688,21 @@ img, svg { display: block; }
 
   .review { padding: 22px 18px; }
   .faq-item summary { padding: 18px; font-size: 16px; }
+  .quiz { min-height: 0; padding: 20px 16px; margin: 0 calc(var(--gutter) * -1); border-radius: 0; border-left: 0; border-right: 0; }
+  .quiz-q { font-size: 20px; }
+  .quiz-options { grid-template-columns: minmax(0, 1fr); }
+  .quiz-opt { min-height: 56px; font-size: 15px; }
+  .quiz-result h3 { font-size: 23px; }
+  .quiz-price b { font-size: 30px; }
+  .quiz-actions .btn { flex: 1 1 100%; }
+  .anatomy-step p { font-size: 16px; }
+  .numbers-section { padding: 64px 0; }
+  .numbers li { padding: 0 0 0 16px; }
+  .num-text { font-size: 14px; }
+  .compare { margin: 0 calc(var(--gutter) * -1); border-radius: 0; }
+  .compare-tag { top: 10px; padding: 6px 10px; font-size: 13px; }
+  .compare-tag-cold { left: 10px; }
+  .compare-tag-warm { right: 10px; }
   .faq-item p { padding: 0 18px 18px; }
   .cta-actions { width: 100%; }
   .cta-actions .btn { flex: 1 1 100%; }
@@ -1425,6 +1713,7 @@ img, svg { display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .gusts { display: none; }
   *,
   *::before,
   *::after {

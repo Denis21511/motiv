@@ -8,14 +8,18 @@ const OUT_H = 900;
 
 // mode — режим подсветки из калькулятора; focus — деталь, вокруг которой кадрируем; zoom — приближение
 const SHOTS = [
-  { name: 'regulirovka', size: [1300, 1400, 2], mode: 'close', phase: 'open', yaw: -0.5, pitch: 0.08, zoom: 1 },
+  // карточки услуг: разные ракурсы и крупные планы, чтобы картинки не повторяли друг друга
+  { name: 'regulirovka', size: [1300, 1400, 2], mode: 'close', phase: 'open', yaw: 0.42, pitch: 0.1, zoom: 1 },
   { name: 'uplotnitel', size: [1300, 1400, 2], mode: 'seal', focus: 'seal', yaw: -0.62, pitch: 0.12, zoom: 2.2 },
   { name: 'ruchka', size: [1300, 1400, 2], mode: 'handle', phase: 'turned', focus: 'handle', yaw: -0.45, pitch: 0.06, zoom: 3.4 },
   { name: 'furnitura', size: [1300, 1400, 2], mode: 'hardware', focus: 'hardware', yaw: -0.7, pitch: 0.14, zoom: 2.2 },
-  { name: 'steklopaket', size: [1300, 1400, 2], mode: 'glass', yaw: -0.38, pitch: 0.06, zoom: 1 },
+  { name: 'steklopaket', size: [1300, 1400, 2], mode: 'glass', yaw: 0.34, pitch: -0.04, zoom: 1 },
   { name: 'produvanie', size: [1300, 1400, 2], mode: 'draft', yaw: -0.5, pitch: 0.08, zoom: 1 },
-  { name: 'stvorki', size: [900, 1400, 1], mode: 'close', phase: 'half', yaw: -0.55, pitch: 0.1, zoom: 1 },
+  { name: 'stvorki', size: [900, 1400, 1], mode: 'close', phase: 'half', yaw: 0.5, pitch: 0.12, zoom: 1 },
   { name: 'dveri', size: [800, 2150, 1], mode: 'complex', yaw: -0.45, pitch: 0.06, zoom: 1 },
+  // «Было / Стало»: одинаковый ракурс, чтобы слои совпали
+  { name: 'cold', dir: 'compare', size: [1300, 1400, 2], mode: 'draft', yaw: -0.22, pitch: 0.04, zoom: 1 },
+  { name: 'warm', dir: 'compare', size: [1300, 1400, 2], mode: null, yaw: -0.22, pitch: 0.04, zoom: 1 },
 ];
 
 const host = document.getElementById('stage');
@@ -79,7 +83,7 @@ async function run() {
   for (const shot of SHOTS) {
     const [w, h, n] = shot.size;
     viewer.setSize(w, h, n);
-    viewer.setMode(shot.mode);
+    viewer.setMode(shot.mode ?? 'none');
     viewer.o.yaw = shot.yaw;
     viewer.o.pitch = shot.pitch;
     viewer.view.dist = 0;
@@ -100,7 +104,7 @@ async function run() {
 
     step(1);
     const data = capture(shot);
-    const res = await fetch(`/__save?name=${shot.name}`, { method: 'POST', body: data });
+    const res = await fetch(`/__save?name=${shot.name}&dir=${shot.dir || 'services'}`, { method: 'POST', body: data });
     log(`${shot.name}: ${res.ok ? 'ok' : 'ошибка ' + res.status}`);
     viewer.setMode(null);
   }

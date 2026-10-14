@@ -77,6 +77,57 @@ if (calcEl) {
   io.observe(calcEl);
 }
 
+// устройство окна: при прокрутке окно разбирается и подсвечивает деталь из текущего шага
+const anatomyEl = $('#anatomy-viewer');
+const anatomySteps = $$('.anatomy-step');
+let anatomy = null;
+let anatomyStep = 0;
+
+function showAnatomyStep(i) {
+  if (i < 0) return;
+  anatomyStep = i;
+  anatomySteps.forEach((el, k) => el.classList.toggle('is-active', k === i));
+  if (!anatomy || anatomy.failed) return;
+  const step = anatomySteps[i];
+  const explode = step.dataset.explode === '1';
+  if (anatomy.exploded !== explode) anatomy.setExploded(explode);
+  anatomy.setMode(step.dataset.mode);
+}
+
+if (anatomyEl && anatomySteps.length) {
+  const lazy = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((en) => en.isIntersecting)) return;
+      lazy.disconnect();
+      anatomy = new WindowViewer(anatomyEl, {
+        width: 1300,
+        height: 1400,
+        sashes: 2,
+        dims: false,
+        parts: true,
+        yaw: -0.5,
+        pitch: 0.1,
+        pad: { top: 40, right: 32, bottom: 56, left: 32 },
+        theme: { hl: '#3FA2F5', air: '#CFEAFF', dim: '#8FB6E3', shadow: '2,12,35' },
+      });
+      wire(anatomy);
+      showAnatomyStep(anatomyStep);
+    },
+    { rootMargin: '800px 0px' },
+  );
+  lazy.observe(anatomyEl);
+
+  // активный шаг — тот, что пересекает линию чуть ниже середины экрана
+  // (на телефоне верх экрана занят 3D-окном, поэтому линия ниже)
+  const line = matchMedia('(max-width: 900px)').matches ? '-72% 0px -27% 0px' : '-48% 0px -51% 0px';
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((en) => en.isIntersecting && showAnatomyStep(anatomySteps.indexOf(en.target))),
+    { rootMargin: line },
+  );
+  anatomySteps.forEach((el) => io.observe(el));
+  showAnatomyStep(0);
+}
+
 /* ---------- калькулятор ---------- */
 
 const widthInput = $('#calc-width');
@@ -325,6 +376,172 @@ $$('[data-order-comment]').forEach((el) =>
     if (commentField && !commentField.value.trim()) commentField.value = el.dataset.orderComment;
   }),
 );
+
+// выставить параметры калькулятора целиком (из квиза)
+function applyCalc({ width, height, sashes, problem }) {
+  Object.assign(state, { width, height, sashes, problem });
+  if (widthInput) widthInput.value = String(width);
+  if (heightInput) heightInput.value = String(height);
+  const sr = $(`input[name="sashes"][value="${sashes}"]`);
+  if (sr) sr.checked = true;
+  const pr = $(`input[name="problem"][value="${problem}"]`);
+  if (pr) pr.checked = true;
+  update();
+}
+/* ---------- квиз «Что с окном?»: подбирает вид ремонта и считает цену тем же калькулятором ---------- */
+
+const QUIZ_ICONS = {
+  wind: '<path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3M3 19h5"/>',
+  sash: '<rect x="3.5" y="3.5" width="17" height="17"/><path d="M3.5 3.5L11 7v16.5"/>',
+  handle: '<rect x="8.5" y="2.5" width="7" height="9"/><rect x="10.5" y="8" width="3" height="13.5"/>',
+  glass: '<path d="M3.5 6.5l5-2v15l-5 2zM9.5 6.5l5-2v15l-5 2zM15.5 6.5l5-2v15l-5 2z"/>',
+  all: '<rect x="3.5" y="3.5" width="7" height="7"/><rect x="13.5" y="3.5" width="7" height="7"/><rect x="3.5" y="13.5" width="7" height="7"/><rect x="13.5" y="13.5" width="7" height="7"/>',
+  s1: '<rect x="7" y="3.5" width="10" height="17"/>',
+  s2: '<rect x="3.5" y="3.5" width="17" height="17"/><path d="M12 3.5v17"/>',
+  s3: '<rect x="2.5" y="3.5" width="19" height="17"/><path d="M8.8 3.5v17M15.2 3.5v17"/>',
+};
+
+const QUIZ = {
+  start: {
+    q: 'Что беспокоит больше всего?',
+    options: [
+      { t: 'Дует, холодно у окна', icon: 'wind', next: 'draft' },
+      { t: 'Створка плохо закрывается или открывается', icon: 'sash', next: 'sash' },
+      { t: 'Ручка болтается или не поворачивается', icon: 'handle', next: 'handle' },
+      { t: 'Треснуло стекло или запотело между стёклами', icon: 'glass', result: 'glass' },
+      { t: 'Всё понемногу', icon: 'all', result: 'complex' },
+    ],
+  },
+  draft: {
+    q: 'Потрогайте уплотнитель — резинку по краю створки. Какой он?',
+    options: [
+      { t: 'Мягкий и целый', result: 'close' },
+      { t: 'Твёрдый, потрескался или порван', result: 'draft' },
+      { t: 'Не знаю', result: 'draft' },
+    ],
+  },
+  sash: {
+    q: 'Что происходит со створкой?',
+    options: [
+      { t: 'Задевает раму или провисла', result: 'close' },
+      { t: 'Закрывается с большим усилием', result: 'close' },
+      { t: 'Не закрывается до конца или заклинило', result: 'hardware' },
+    ],
+  },
+  handle: {
+    q: 'Что с ручкой?',
+    options: [
+      { t: 'Болтается, прокручивается или сломана', result: 'handle' },
+      { t: 'Поворачивается очень туго', result: 'close' },
+      { t: 'Не поворачивается совсем', result: 'hardware' },
+    ],
+  },
+  sashes: {
+    q: 'Сколько створок в окне?',
+    options: [
+      { t: 'Одна', icon: 's1', sashes: 1 },
+      { t: 'Две', icon: 's2', sashes: 2 },
+      { t: 'Три', icon: 's3', sashes: 3 },
+    ],
+  },
+};
+
+// типовые размеры окна по числу створок, мм
+const QUIZ_SIZE = { 1: [800, 1400], 2: [1400, 1400], 3: [2000, 1400] };
+
+const QUIZ_RESULT = {
+  close: { title: 'Регулировка створок', why: 'Створка сместилась или прижимается неплотно. Обычно хватает регулировки петель и прижима.' },
+  draft: { title: 'Регулировка и замена уплотнителя', why: 'Уплотнитель износился, и воздух проходит через притвор. Меняем контур и регулируем прижим.' },
+  handle: { title: 'Замена ручки', why: 'Ручка разболталась или сломалась — ставим новую.' },
+  hardware: { title: 'Ремонт или замена фурнитуры', why: 'Похоже, износились петли или запорный механизм. Мастер проверит, можно ли обойтись ремонтом.' },
+  glass: { title: 'Замена стеклопакета', why: 'Трещину или конденсат внутри стеклопакета не исправить — его меняют целиком, по размеру створки.' },
+  complex: { title: 'Комплексный ремонт', why: 'Регулировка, смазка и проверка всей фурнитуры, замена уплотнителя.' },
+};
+
+const quizEl = $('#quiz-app');
+if (quizEl) {
+  const q = { node: 'start', history: [], problem: null, sashes: 2 };
+  const icon = (name) => (name ? `<svg viewBox="0 0 24 24" aria-hidden="true">${QUIZ_ICONS[name]}</svg>` : '');
+
+  const render = (focus = false) => {
+    let html;
+    if (q.node === 'result') {
+      const [width, height] = QUIZ_SIZE[q.sashes];
+      const est = estimate({ width, height, sashes: q.sashes, problem: q.problem });
+      const r = QUIZ_RESULT[q.problem];
+      const sashWord = plural(q.sashes, 'створка', 'створки', 'створок');
+      html = `<div class="quiz-body quiz-result">
+        <p class="quiz-label">Скорее всего, нужно</p>
+        <h3 tabindex="-1">${r.title}</h3>
+        <p class="quiz-why">${r.why}</p>
+        <div class="quiz-price"><span>Ориентировочно</span><b>${rub(est.total)}</b><small>для типового окна ${width} × ${height} мм, ${q.sashes} ${sashWord}</small></div>
+        <ul class="quiz-lines">${est.lines.map((l) => `<li><span>${l.label}</span><span>${rub(l.sum)}</span></li>`).join('')}</ul>
+        <div class="quiz-actions">
+          <a class="btn btn-accent btn-lg" href="#order" data-quiz-go="order">Вызвать мастера</a>
+          <a class="btn btn-outline btn-lg" href="#calc" data-quiz-go="calc">Уточнить размеры</a>
+        </div>
+        <button class="quiz-restart" type="button">Пройти заново</button>
+        <p class="quiz-note">Это предварительная оценка по&nbsp;ответам. Точную причину мастер определит на&nbsp;месте.</p>
+      </div>`;
+    } else {
+      const node = QUIZ[q.node];
+      // если причина ясна с первого ответа — вопросов два, иначе три
+      const total = q.problem && q.node === 'sashes' && q.history.length === 1 ? 2 : 3;
+      const n = Math.min(total, q.history.length + 1);
+      html = `<div class="quiz-body">
+        <div class="quiz-top"><span>Вопрос ${n} из ${total}</span><span class="quiz-bar"><i style="width:${((n - 1) / total) * 100 + 8}%"></i></span></div>
+        <h3 class="quiz-q" tabindex="-1">${node.q}</h3>
+        <div class="quiz-options">${node.options
+          .map((o, i) => `<button class="quiz-opt" type="button" data-i="${i}">${icon(o.icon)}<span>${o.t}</span></button>`)
+          .join('')}</div>
+        ${q.history.length ? '<button class="quiz-back" type="button">← Назад</button>' : ''}
+      </div>`;
+    }
+    quizEl.innerHTML = html;
+    const body = $('.quiz-body', quizEl);
+    if (!REDUCED) body.classList.add('is-enter');
+    if (focus) $('[tabindex="-1"]', quizEl)?.focus({ preventScroll: true });
+  };
+
+  quizEl.addEventListener('click', (e) => {
+    const opt = e.target.closest('.quiz-opt');
+    if (opt) {
+      const o = QUIZ[q.node].options[Number(opt.dataset.i)];
+      q.history.push({ node: q.node, problem: q.problem });
+      if (o.sashes) {
+        q.sashes = o.sashes;
+        q.node = 'result';
+      } else {
+        if (o.result) q.problem = o.result;
+        q.node = o.next || 'sashes';
+      }
+      render(true);
+      return;
+    }
+    if (e.target.closest('.quiz-back')) {
+      const prev = q.history.pop();
+      if (prev) Object.assign(q, prev);
+      render(true);
+      return;
+    }
+    if (e.target.closest('.quiz-restart')) {
+      Object.assign(q, { node: 'start', history: [], problem: null, sashes: 2 });
+      render(true);
+      return;
+    }
+    const go = e.target.closest('[data-quiz-go]');
+    if (go) {
+      // переносим ответ в калькулятор и заявку
+      const [width, height] = QUIZ_SIZE[q.sashes];
+      applyCalc({ width, height, sashes: q.sashes, problem: q.problem });
+      if (go.dataset.quizGo === 'order' && commentField && !commentField.value.trim()) {
+        commentField.value = `По квизу: ${QUIZ_RESULT[q.problem].title.toLowerCase()}. `;
+      }
+    }
+  });
+
+  render();
+}
 
 /* ---------- форма заявки ---------- */
 

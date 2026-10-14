@@ -1,6 +1,6 @@
 // Рендер картинок для карточек услуг из 3D-модели окна.
 // npm run render:services → открыть http://127.0.0.1:5199/ в Chrome/Edge и дождаться «готово».
-// PNG сохраняются в assets/img/services/, дальше их можно пережать в WebP.
+// PNG сохраняются в assets/img/services/ и assets/img/compare/, дальше их можно пережать в WebP.
 import { createServer } from 'node:http';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -9,8 +9,8 @@ import { build } from 'esbuild';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dir = join(root, 'scripts', 'render-services');
-const outDir = join(root, 'assets', 'img', 'services');
-mkdirSync(outDir, { recursive: true });
+const DIRS = ['services', 'compare'];
+for (const d of DIRS) mkdirSync(join(root, 'assets', 'img', d), { recursive: true });
 
 const { outputFiles } = await build({
   entryPoints: [join(dir, 'shots.js')],
@@ -27,11 +27,12 @@ createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (req.method === 'POST' && url.pathname === '/__save') {
     const name = (url.searchParams.get('name') || '').replace(/[^a-z0-9-]/g, '');
+    const dir = DIRS.includes(url.searchParams.get('dir')) ? url.searchParams.get('dir') : 'services';
     let body = '';
     req.on('data', (c) => (body += c));
     req.on('end', () => {
       const b64 = body.replace(/^data:image\/png;base64,/, '');
-      writeFileSync(join(outDir, `${name}.png`), Buffer.from(b64, 'base64'));
+      writeFileSync(join(root, 'assets', 'img', dir, `${name}.png`), Buffer.from(b64, 'base64'));
       console.log('сохранено:', name);
       res.end('ok');
     });
