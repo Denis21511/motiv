@@ -195,7 +195,10 @@ export class WindowViewer {
     }
 
     const r = this.renderer;
-    r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // выше 1.5 разница на глаз не видна, а пикселей вдвое больше
+    this.pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    this.perf = { frames: 0, time: 0 };
+    r.setPixelRatio(this.pixelRatio);
     r.outputColorSpace = THREE.SRGBColorSpace;
     r.toneMapping = THREE.NeutralToneMapping;
     r.toneMappingExposure = 1.0;
@@ -255,19 +258,13 @@ export class WindowViewer {
   /* ---------- материалы ---------- */
 
   makeMaterials() {
-    const pvc = () =>
-      new THREE.MeshPhysicalMaterial({
-        color: '#F2F3F1',
-        roughness: 0.4,
-        clearcoat: 0.25,
-        clearcoatRoughness: 0.35,
-      });
+    const pvc = () => new THREE.MeshStandardMaterial({ color: '#F2F3F1', roughness: 0.36 });
     const M = {
       frame: pvc(),
       sash: pvc(),
       bead: pvc(),
       seal: new THREE.MeshStandardMaterial({ color: '#33383E', roughness: 0.85 }),
-      glass: new THREE.MeshPhysicalMaterial({
+      glass: new THREE.MeshStandardMaterial({
         color: '#D3E6E8',
         roughness: 0.03,
         metalness: 0,
@@ -278,7 +275,7 @@ export class WindowViewer {
         side: THREE.DoubleSide,
       }),
       spacer: new THREE.MeshStandardMaterial({ color: '#AEB5BB', metalness: 0.7, roughness: 0.4 }),
-      handle: new THREE.MeshPhysicalMaterial({ color: '#F7F7F5', roughness: 0.28, clearcoat: 0.6 }),
+      handle: new THREE.MeshStandardMaterial({ color: '#F7F7F5', roughness: 0.24 }),
       hinge: new THREE.MeshStandardMaterial({ color: '#D5D9DC', metalness: 0.5, roughness: 0.35 }),
       lock: new THREE.MeshStandardMaterial({ color: '#B9C0C6', metalness: 0.85, roughness: 0.35 }),
       dim: new THREE.LineBasicMaterial({ color: this.theme.dim, transparent: true }),
@@ -705,14 +702,15 @@ export class WindowViewer {
 
   invalidate(force = false) {
     if (this.failed || this.raf || (!this.visible && !force)) return;
-    this.last = performance.now();
+    this.last = 0; // первый кадр после простоя считаем обычным, 1/60 с
     this.raf = requestAnimationFrame(this.tick);
   }
 
   tick(now) {
     this.raf = 0;
-    const dt = Math.min(0.05, (now - this.last) / 1000);
+    const dt = this.last ? clamp((now - this.last) / 1000, 0, 0.05) : 1 / 60;
     this.last = now;
+    if (this.drag) this.adaptQuality(dt);
     this.time += dt;
     let busy = false;
 
@@ -775,7 +773,7 @@ export class WindowViewer {
     const e = ease.inOutCubic(this.fx.explode);
     const tYaw = clamp(lerp(this.o.yaw, EXPLODED_VIEW.yaw, e) + this.user.yaw, -1.2, 0.95);
     const tPitch = clamp(lerp(this.o.pitch, EXPLODED_VIEW.pitch, e) + this.user.pitch, -0.22, 0.45);
-    const k = 1 - Math.pow(0.0015, dt);
+    const k = 1 - Math.pow(this.drag ? 1e-9 : 0.0015, dt);
     this.view.yaw += (tYaw - this.view.yaw) * k;
     this.view.pitch += (tPitch - this.view.pitch) * k;
     const fitD = this.fitDistance(e);
@@ -923,6 +921,21 @@ export class WindowViewer {
     this.camera.updateProjectionMatrix();
   }
 
+  // если при вращении меньше ~40 кадров в секунду — снижаем разрешение сцены
+  adaptQuality(dt) {
+    const p = this.perf;
+    p.frames++;
+    p.time += dt;
+    if (p.frames < 24) return;
+    const slow = p.time / p.frames > 1 / 40;
+    p.frames = 0;
+    p.time = 0;
+    if (!slow || this.pixelRatio <= 0.75) return;
+    this.pixelRatio = Math.max(0.75, this.pixelRatio - 0.25);
+    this.renderer.setPixelRatio(this.pixelRatio);
+    this.resize();
+  }
+
   resize() {
     if (this.failed) return;
     const r = this.el.getBoundingClientRect();
@@ -952,6 +965,13 @@ export class WindowViewer {
   }
 
   updateOverlay(e) {
+    if (!this.o.dims && !this.o.parts) {
+      if (this.overlayHidden) return;
+      this.dimLabels.forEach((el) => (el.style.opacity = '0'));
+      this.partLabels.forEach((l) => (l.el.style.opacity = '0'));
+      this.overlayHidden = true;
+      return;
+    }
     this.model.updateMatrixWorld(true);
     // размеры
     if (this.o.dims && this.dimAnchors) {
