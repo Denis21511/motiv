@@ -11,8 +11,39 @@ window.__motivFx = true;
 splitWords($('.hero h1'));
 requestAnimationFrame(() => $('.hero')?.classList.add('is-in'));
 
-const heroPlanet = $('#hero-viewer .planet');
-if (heroPlanet) new PixelPlanet(heroPlanet, { host: $('#hero-viewer') });
+/* облака за окном: проявляются, когда видео пошло; вне экрана — на паузе */
+const sky = $('.hero-sky');
+const skyVideo = $('.hero-sky-video');
+if (sky && skyVideo) {
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ready = () => sky.classList.add('is-ready');
+  if (still) {
+    // без движения: остаётся кадр-заставка
+    skyVideo.removeAttribute('autoplay');
+    skyVideo.pause();
+    ready();
+  } else {
+    if (skyVideo.readyState >= 3) ready();
+    skyVideo.addEventListener('playing', ready, { once: true });
+    // если автозапуск запрещён (режим энергосбережения) — показываем заставку
+    skyVideo.play()?.catch(ready);
+    new IntersectionObserver(([en]) => {
+      if (en.isIntersecting) skyVideo.play()?.catch(() => {});
+      else skyVideo.pause();
+    }).observe(sky);
+  }
+}
+
+/* «Цена по фото»: сразу открываем выбор фото и переходим к заявке */
+$$('[data-photo-quote]').forEach((a) =>
+  a.addEventListener('click', () => {
+    const input = $('#order-photo');
+    if (!input) return;
+    const comment = $('#order-comment');
+    if (comment && !comment.value) comment.value = 'Оцените ремонт по фото: ';
+    input.click();
+  }),
+);
 
 const ctaPlanet = $('.cta-band .planet');
 if (ctaPlanet) {

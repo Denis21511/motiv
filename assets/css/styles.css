@@ -14,6 +14,8 @@
   --sky-200: #BFE0F8;
   --sky-100: #DDEEFC;
   --sky-50: #EEF6FE;
+  --accent: #FFB627; /* только кнопки заявки */
+  --accent-hover: #FFC654;
 
   --ink: #0A2340;
   --ink-2: #29425F;
@@ -134,6 +136,10 @@ img, svg { display: block; }
 
 .btn-sky { background: var(--sky-300); color: var(--navy-800); }
 .btn-sky:hover { background: #A9DAFA; }
+
+.btn-accent { background: var(--accent); color: var(--navy-900); font-weight: 600; box-shadow: 0 6px 18px -8px rgba(255, 182, 39, 0.75); }
+.btn-accent:hover { background: var(--accent-hover); }
+.btn-accent:disabled { background: #FFD98A; cursor: progress; transform: none; box-shadow: none; }
 
 .btn-ghost { border-color: rgba(255, 255, 255, 0.45); color: #fff; }
 .btn-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); }
@@ -256,7 +262,23 @@ img, svg { display: block; }
   overflow: hidden;
 }
 
+/* облака за окном: видео на всю ширину, слева затемнено под текст */
+.hero-sky { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.hero-sky-video { width: 100%; height: 100%; object-fit: cover; }
+.js .hero-sky-video { opacity: 0; transition: opacity 1.4s ease; }
+.js .hero-sky.is-ready .hero-sky-video { opacity: 1; }
+.hero-sky::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(11, 42, 87, 0) 62%, rgba(11, 42, 87, 0.6) 100%),
+    linear-gradient(90deg, rgba(21, 83, 184, 0.97) 0%, rgba(21, 83, 184, 0.92) 33%, rgba(21, 83, 184, 0.5) 56%, rgba(14, 58, 120, 0.3) 100%);
+}
+
 .hero-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: 24px;
@@ -1026,6 +1048,62 @@ img, svg { display: block; }
 .review-author { margin-top: 22px; padding-left: 14px; border-left: 3px solid var(--sky-300); font-size: 15px; font-weight: 600; }
 .review-author span { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
 
+/* ---------- вопросы и ответы ---------- */
+
+.faq-section { background: var(--sky-100); }
+.faq-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: start; }
+.faq-grid .section-head { position: sticky; top: calc(var(--header-h, 72px) + 24px); margin-bottom: 0; }
+.faq-grid .section-head .btn { margin-top: 24px; }
+.faq { display: grid; gap: 10px; }
+.faq-item { background: #fff; border-radius: var(--radius-l); box-shadow: 0 1px 0 var(--line); }
+.faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '';
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background:
+    linear-gradient(var(--blue-600), var(--blue-600)) center / 100% 2px no-repeat,
+    linear-gradient(var(--blue-600), var(--blue-600)) center / 2px 100% no-repeat;
+  transition: transform 0.25s var(--ease-out);
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item summary:hover { color: var(--blue-600); }
+.faq-item p { padding: 0 24px 22px; max-width: 44em; color: var(--ink-2); line-height: 1.6; }
+
+/* ---------- кнопка WhatsApp ---------- */
+
+.float-wa {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  box-shadow: 0 10px 24px -8px rgba(6, 25, 58, 0.55);
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s;
+}
+.float-wa svg { width: 30px; height: 30px; fill: currentColor; }
+.float-wa:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 28px -8px rgba(6, 25, 58, 0.6); }
+
 /* ---------- финальный блок ---------- */
 
 .cta-band { position: relative; padding: 112px 0 104px; background: var(--navy-800); color: #fff; overflow: hidden; }
@@ -1103,6 +1181,9 @@ img, svg { display: block; }
 
   .hero { padding: 16px 0 64px; }
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .hero-sky::after {
+    background: linear-gradient(180deg, rgba(21, 83, 184, 0.97) 0%, rgba(21, 83, 184, 0.93) 46%, rgba(21, 83, 184, 0.45) 66%, rgba(11, 42, 87, 0.5) 100%);
+  }
   .hero-copy { padding: 8px 0 0; }
   .hero-viewer { height: 420px; }
   .hero-copy .hero-title { font-size: clamp(38px, 6vw, 52px); }
@@ -1131,6 +1212,8 @@ img, svg { display: block; }
   .steps p { margin-top: 4px; }
 
   .reviews { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .faq-grid .section-head { position: static; }
   .section-head-row { flex-direction: column; align-items: flex-start; }
 
   .cta-band { padding: 88px 0 72px; }
@@ -1155,6 +1238,8 @@ img, svg { display: block; }
     transition: transform 0.35s var(--ease-out);
   }
   .mobile-bar.is-visible { transform: none; }
+  /* над плашкой «Нужен ремонт окна?» */
+  .float-wa { right: 16px; bottom: calc(80px + env(safe-area-inset-bottom)); width: 52px; height: 52px; }
   .mobile-bar p { font-size: 15px; font-weight: 600; }
   .site-footer { padding-bottom: 72px; }
 }
@@ -1221,6 +1306,8 @@ img, svg { display: block; }
   .price-table td b { font-size: 17px; }
 
   .review { padding: 22px 18px; }
+  .faq-item summary { padding: 18px; font-size: 16px; }
+  .faq-item p { padding: 0 18px 18px; }
   .cta-actions { width: 100%; }
   .cta-actions .btn { flex: 1 1 100%; }
 
