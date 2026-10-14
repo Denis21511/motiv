@@ -253,6 +253,16 @@ export class WindowViewer {
     this.resize();
     this.view.yaw = this.o.yaw;
     this.view.pitch = this.o.pitch;
+
+    // шейдеры собираются параллельно (KHR_parallel_shader_compile), страница не замирает;
+    // окно показываем, когда всё готово
+    this.ready = false;
+    const done = () => {
+      this.ready = true;
+      container.classList.add('is-ready');
+      this.invalidate(true);
+    };
+    r.compileAsync(this.scene, this.camera).then(done, done);
   }
 
   /* ---------- материалы ---------- */
@@ -701,7 +711,7 @@ export class WindowViewer {
   }
 
   invalidate(force = false) {
-    if (this.failed || this.raf || (!this.visible && !force)) return;
+    if (this.failed || !this.ready || this.raf || (!this.visible && !force)) return;
     this.last = 0; // первый кадр после простоя считаем обычным, 1/60 с
     this.raf = requestAnimationFrame(this.tick);
   }

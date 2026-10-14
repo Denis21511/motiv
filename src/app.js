@@ -24,38 +24,58 @@ const LEGEND = {
 const heroEl = $('#hero-viewer');
 const calcEl = $('#calc-viewer');
 
-const hero =
-  heroEl &&
-  new WindowViewer(heroEl, {
-    width: 1300,
-    height: 1500,
-    sashes: 2,
-    dims: false,
-    parts: false,
-    tilt: true,
-    yaw: -0.42,
-    pitch: 0.05,
-    pad: { top: 40, right: 40, bottom: 48, left: 40 },
-    theme: { shadow: '4,20,60' },
-  });
+// 3D создаём не при загрузке, а когда оно нужно: создание сцены и сборка шейдеров
+// на мгновение блокируют страницу, и при открытии сайта это выглядело как зависание
+let hero = null;
+let viewer = null;
 
-const viewer =
-  calcEl &&
-  new WindowViewer(calcEl, {
-    width: state.width,
-    height: state.height,
-    sashes: state.sashes,
-    pad: { top: 64, right: 24, bottom: 40, left: 24 },
-    topBar: calcEl.querySelector('.stage-bar'),
-    theme: { hl: '#3FA2F5', air: '#CFEAFF', dim: '#8FB6E3', shadow: '2,12,35' },
-  });
+function wire(v) {
+  if (v.failed) document.documentElement.classList.add('no-webgl');
+  else v.el.addEventListener('w3d:interact', () => v.el.classList.add('was-touched'), { once: true });
+}
 
-[hero, viewer].forEach((v) => {
-  if (!v || v.failed) return;
-  v.el.addEventListener('w3d:interact', () => v.el.classList.add('was-touched'), { once: true });
-});
+// окно на главном экране — сразу после первой отрисовки: текст и облака видны без задержки
+if (heroEl) {
+  requestAnimationFrame(() =>
+    setTimeout(() => {
+      hero = new WindowViewer(heroEl, {
+        width: 1300,
+        height: 1500,
+        sashes: 2,
+        dims: false,
+        parts: false,
+        tilt: true,
+        yaw: -0.42,
+        pitch: 0.05,
+        pad: { top: 40, right: 40, bottom: 48, left: 40 },
+        theme: { shadow: '4,20,60' },
+      });
+      wire(hero);
+    }),
+  );
+}
 
-if (viewer?.failed || hero?.failed) document.documentElement.classList.add('no-webgl');
+// окно калькулятора — когда до него остаётся примерно экран прокрутки
+if (calcEl) {
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((en) => en.isIntersecting)) return;
+      io.disconnect();
+      viewer = new WindowViewer(calcEl, {
+        width: state.width,
+        height: state.height,
+        sashes: state.sashes,
+        pad: { top: 64, right: 24, bottom: 40, left: 24 },
+        topBar: calcEl.querySelector('.stage-bar'),
+        theme: { hl: '#3FA2F5', air: '#CFEAFF', dim: '#8FB6E3', shadow: '2,12,35' },
+      });
+      wire(viewer);
+      update();
+    },
+    { rootMargin: '800px 0px' },
+  );
+  io.observe(calcEl);
+}
 
 /* ---------- калькулятор ---------- */
 
