@@ -262,41 +262,18 @@ img, svg { display: block; }
   overflow: hidden;
 }
 
-/* небо с облаками: облака рисует src/clouds.js, здесь — небо, движение и затухание под текстом */
+/* облака за окном: видео на всю ширину, слева затемнено под текст */
 .sky { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.clouds {
-  position: absolute;
-  inset: 0;
-  --fade: linear-gradient(90deg, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.3) 34%, #000 60%);
-  -webkit-mask-image: var(--fade);
-  mask-image: var(--fade);
-}
-.js .clouds { opacity: 0; transition: opacity 1.6s ease; }
-.js .sky.is-ready .clouds { opacity: 1; }
-.cloud {
-  position: absolute;
-  left: 0;
-  opacity: var(--o, 1);
-  will-change: transform;
-  animation: cloud-drift linear infinite;
-}
-@keyframes cloud-drift {
-  from { transform: translate3d(calc(var(--w) * -1.1), -50%, 0); }
-  to { transform: translate3d(var(--sky-w, 100vw), -50%, 0); }
-}
-.sky.is-paused .cloud { animation-play-state: paused; }
-
-.hero-sky {
-  background:
-    linear-gradient(90deg, rgba(17, 72, 170, 0.92) 0%, rgba(17, 72, 170, 0.72) 34%, rgba(17, 72, 170, 0) 62%),
-    radial-gradient(55% 75% at 92% -5%, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0) 70%),
-    linear-gradient(180deg, #1550B4 0%, #2672D4 55%, #3E8EE2 100%);
-}
+.sky-video { width: 100%; height: 100%; object-fit: cover; }
+.js .sky-video { opacity: 0; transition: opacity 1.4s ease; }
+.js .sky.is-ready .sky-video { opacity: 1; }
 .hero-sky::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11, 42, 87, 0) 70%, rgba(11, 42, 87, 0.42) 100%);
+  background:
+    linear-gradient(180deg, rgba(11, 42, 87, 0) 62%, rgba(11, 42, 87, 0.6) 100%),
+    linear-gradient(90deg, rgba(17, 72, 170, 0.86) 0%, rgba(17, 72, 170, 0.66) 34%, rgba(17, 72, 170, 0.12) 62%, rgba(17, 72, 170, 0) 100%);
 }
 
 .hero-grid {
@@ -969,19 +946,17 @@ img, svg { display: block; }
 
 /* ---------- цены ---------- */
 
-.prices-section { background: var(--blue-800); color: #fff; overflow: hidden; }
-.prices-sky {
-  background:
-    linear-gradient(100deg, rgba(14, 58, 120, 0.94) 0%, rgba(21, 83, 184, 0.7) 42%, rgba(21, 83, 184, 0.2) 100%),
-    linear-gradient(180deg, #1550B4 0%, #2A76D6 100%);
+.prices-section { background: var(--blue-800) url(../video/sky-poster.jpg) center / cover no-repeat; color: #fff; overflow: hidden; }
+.prices-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(14, 58, 120, 0.96) 0%, rgba(21, 83, 184, 0.88) 42%, rgba(21, 83, 184, 0.62) 100%);
 }
-.prices-sky .clouds { --fade: linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.3) 36%, rgba(0, 0, 0, 0.85) 100%); }
 .prices-grid { position: relative; z-index: 1; }
 .price-panel {
   padding: 26px 30px 10px;
-  background: rgba(8, 32, 76, 0.5);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  background: rgba(6, 25, 58, 0.36);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-l);
   -webkit-backdrop-filter: blur(8px);
@@ -1714,12 +1689,14 @@ img, svg { display: block; }
 /* ---------- финальный блок ---------- */
 
 .cta-band { position: relative; padding: 112px 0 104px; background: var(--navy-800); color: #fff; overflow: hidden; }
-.cta-sky {
-  background:
-    linear-gradient(90deg, rgba(11, 42, 87, 0.94) 0%, rgba(11, 42, 87, 0.78) 42%, rgba(14, 58, 120, 0) 82%),
-    linear-gradient(180deg, #1A5CBE 0%, #3584DC 100%);
+/* облака уже загружены на главном экране — до запуска видео показываем кадр-заставку */
+.cta-sky { background: url(../video/sky-poster.jpg) center / cover no-repeat; }
+.cta-sky::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(11, 42, 87, 0.95) 0%, rgba(11, 42, 87, 0.84) 46%, rgba(14, 58, 120, 0.42) 100%);
 }
-.cta-sky .clouds { --fade: linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0%, rgba(0, 0, 0, 0.22) 40%, #000 78%); }
 .cta-inner { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 48px; }
 .cta-band h2 { max-width: 16em; font-size: clamp(28px, 2.9vw, 40px); }
 .cta-band p { margin-top: 14px; font-size: 18px; color: var(--on-dark-2); }
@@ -1796,13 +1773,9 @@ img, svg { display: block; }
 
   .hero { padding: 16px 0 64px; }
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  .hero-sky {
-    background:
-      linear-gradient(180deg, rgba(17, 72, 170, 0.6) 0%, rgba(17, 72, 170, 0.45) 46%, rgba(17, 72, 170, 0) 66%),
-      radial-gradient(80% 50% at 100% 0%, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0) 70%),
-      linear-gradient(180deg, #1550B4 0%, #2672D4 55%, #3E8EE2 100%);
+  .hero-sky::after {
+    background: linear-gradient(180deg, rgba(17, 72, 170, 0.84) 0%, rgba(17, 72, 170, 0.7) 46%, rgba(17, 72, 170, 0.15) 66%, rgba(11, 42, 87, 0.45) 100%);
   }
-  .hero-sky .clouds { --fade: linear-gradient(180deg, rgba(0, 0, 0, 0.32) 0%, rgba(0, 0, 0, 0.32) 50%, #000 68%); }
   .hero-copy { padding: 8px 0 0; }
   .hero-viewer { height: 420px; }
   .hero-copy .hero-title { font-size: clamp(38px, 6vw, 52px); }
@@ -1832,8 +1805,7 @@ img, svg { display: block; }
 
   .reviews { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .step-icon { display: none; }
-  .cta-sky { background: linear-gradient(180deg, rgba(11, 42, 87, 0.86), rgba(11, 42, 87, 0.7)), linear-gradient(180deg, #1A5CBE 0%, #2D7AD8 100%); }
-  .cta-sky .clouds { --fade: linear-gradient(#0006, #0006); }
+  .cta-sky::after { background: rgba(11, 42, 87, 0.86); }
   .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .quiz-grid,
   .compare-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
@@ -1995,7 +1967,6 @@ img, svg { display: block; }
   .steam path { animation: none !important; opacity: 0.55; }
   .glow,
   .lamp { animation: none !important; }
-  .cloud { animation: none !important; transform: translate3d(calc(var(--p) * (var(--sky-w) + var(--w) * 1.1) - var(--w) * 1.1), -50%, 0); }
   *,
   *::before,
   *::after {

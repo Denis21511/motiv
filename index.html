@@ -109,8 +109,13 @@
   <main>
     <!-- Главный экран -->
     <section class="hero on-dark" id="top">
-      <!-- фон: небо с облаками, облака рисует src/clouds.js -->
-      <div class="sky hero-sky" data-clouds="hero" aria-hidden="true"></div>
+      <!-- фон: облака за окном. Видео — Mixkit 51105, бесплатная лицензия (mixkit.co/license), замедлено в 4 раза, петля склеена без шва -->
+      <div class="sky hero-sky" aria-hidden="true">
+        <video class="sky-video" autoplay muted loop playsinline preload="auto" poster="assets/video/sky-poster.jpg">
+          <source src="assets/video/sky.mp4" type="video/mp4" media="(min-width: 761px)">
+          <source src="assets/video/sky-mobile.mp4" type="video/mp4">
+        </video>
+      </div>
       <div class="container hero-grid">
         <div class="hero-copy">
           <h1 class="hero-title">
@@ -497,7 +502,6 @@
 
     <!-- Цены -->
     <section class="section prices-section on-dark" id="prices">
-      <div class="sky prices-sky" data-clouds="band" aria-hidden="true"></div>
       <div class="pixel-edge" data-edge="top" style="--edge: #fff" aria-hidden="true"></div>
       <div class="container prices-grid">
         <div class="prices-intro" data-reveal>
@@ -704,7 +708,12 @@
     <!-- Финальный блок -->
     <section class="cta-band on-dark">
       <div class="pixel-edge" data-edge="top" style="--edge: var(--sky-100)" aria-hidden="true"></div>
-      <div class="sky cta-sky" data-clouds="band" aria-hidden="true"></div>
+      <div class="sky cta-sky" aria-hidden="true">
+        <video class="sky-video" muted loop playsinline preload="none" poster="assets/video/sky-poster.jpg">
+          <source src="assets/video/sky.mp4" type="video/mp4" media="(min-width: 761px)">
+          <source src="assets/video/sky-mobile.mp4" type="video/mp4">
+        </video>
+      </div>
       <div class="container cta-inner" data-reveal-group>
         <div>
           <h2>Окно продувает, плохо закрывается или не&nbsp;работает ручка?</h2>
